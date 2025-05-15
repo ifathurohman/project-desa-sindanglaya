@@ -1,13 +1,22 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Sprout, Fish, Trees as Tree, Mountain, Beaker, Factory } from 'lucide-react';
+import { 
+  ChevronDown, 
+  Sprout, 
+  Fish, 
+  Trees as Tree, 
+  Mountain, 
+  Beaker, 
+  Factory,
+  Bird,
+  Cow 
+} from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-// Data interfaces
 interface BaseProductionData {
   year: number;
   commodity: string;
@@ -39,7 +48,14 @@ interface MiningData {
   scale: string;
 }
 
-// Agriculture Data
+interface LivestockData {
+  year: number;
+  type: string;
+  male: number;
+  female: number;
+  total: number;
+}
+
 const agricultureData: BaseProductionData[] = [
   {
     year: 2015,
@@ -205,7 +221,6 @@ const agricultureData: BaseProductionData[] = [
   }
 ];
 
-// Plantation Data
 const plantationData: PlantationData[] = [
   {
     year: 2022,
@@ -269,7 +284,6 @@ const plantationData: PlantationData[] = [
   }
 ];
 
-// Biopharmaca Data
 const biopharmacaData: BaseProductionData[] = [
   {
     year: 2025,
@@ -309,7 +323,6 @@ const biopharmacaData: BaseProductionData[] = [
   }
 ];
 
-// Forest Products Data
 const forestData: BaseProductionData[] = [
   {
     year: 2015,
@@ -323,7 +336,6 @@ const forestData: BaseProductionData[] = [
   }
 ];
 
-// Mining Data
 const miningData: MiningData[] = [
   {
     year: 2013,
@@ -357,7 +369,6 @@ const miningData: MiningData[] = [
   }
 ];
 
-// Aquaculture Data
 const aquacultureData: AquacultureData[] = [
   {
     year: 2025,
@@ -373,13 +384,108 @@ const aquacultureData: AquacultureData[] = [
   }
 ];
 
+const livestockData: LivestockData[] = [
+  {
+    year: 2024,
+    type: "Sapi Potong",
+    male: 0,
+    female: 0,
+    total: 160
+  },
+  {
+    year: 2024,
+    type: "Sapi Perah",
+    male: 18,
+    female: 91,
+    total: 109
+  },
+  {
+    year: 2024,
+    type: "Kerbau",
+    male: 0,
+    female: 152,
+    total: 152
+  },
+  {
+    year: 2024,
+    type: "Kambing",
+    male: 0,
+    female: 0,
+    total: 1823
+  },
+  {
+    year: 2024,
+    type: "Domba",
+    male: 0,
+    female: 0,
+    total: 26009
+  },
+  {
+    year: 2024,
+    type: "Ayam Buras",
+    male: 0,
+    female: 0,
+    total: 45277
+  },
+  {
+    year: 2024,
+    type: "Ayam Ras Petelur",
+    male: 2326,
+    female: 35561,
+    total: 37887
+  },
+  {
+    year: 2024,
+    type: "Ayam Ras Pedaging",
+    male: 0,
+    female: 0,
+    total: 73654
+  },
+  {
+    year: 2024,
+    type: "Itik",
+    male: 0,
+    female: 0,
+    total: 932
+  },
+  {
+    year: 2024,
+    type: "Itik Manila",
+    male: 0,
+    female: 0,
+    total: 2044
+  },
+  {
+    year: 2024,
+    type: "Puyuh",
+    male: 0,
+    female: 0,
+    total: 1937
+  },
+  {
+    year: 2024,
+    type: "Kelinci",
+    male: 0,
+    female: 0,
+    total: 880
+  },
+  {
+    year: 2024,
+    type: "Kambing Perah",
+    male: 0,
+    female: 0,
+    total: 33
+  }
+];
+
 const categories = [
   { id: 'agriculture', title: 'Pertanian', icon: Sprout },
   { id: 'plantation', title: 'Perkebunan', icon: Tree },
   { id: 'biopharmaca', title: 'Biofarmaka', icon: Beaker },
   { id: 'forest', title: 'Hasil Hutan', icon: Tree },
   { id: 'mining', title: 'Galian', icon: Mountain },
-  { id: 'aquaculture', title: 'Budidaya Air', icon: Fish }
+  { id: 'aquaculture', title: 'Budidaya Air', icon: Fish },
+  { id: 'livestock', title: 'Peternakan', icon: Cow }
 ];
 
 const AgricultureStats: React.FC = () => {
@@ -501,6 +607,101 @@ const AgricultureStats: React.FC = () => {
     </div>
   );
 
+  const renderLivestockData = () => (
+    <div className="space-y-4">
+      {livestockData.map((item) => (
+        <div key={`${item.year}-${item.type}`} className="border rounded-lg">
+          <button
+            onClick={() => setExpandedItem(
+              expandedItem === `${item.year}-${item.type}` 
+                ? null 
+                : `${item.year}-${item.type}`
+            )}
+            className="w-full px-4 py-3 flex items-center justify-between text-left"
+          >
+            <div>
+              <span className="font-medium">{item.type}</span>
+              <span className="text-sm text-gray-500 ml-2">({item.year})</span>
+            </div>
+            <div className="flex items-center">
+              <span className="text-sm font-medium bg-primary-100 text-primary-800 px-2 py-1 rounded-full mr-2">
+                Total: {item.total}
+              </span>
+              <ChevronDown
+                className={`w-4 h-4 transition-transform ${
+                  expandedItem === `${item.year}-${item.type}` ? 'rotate-180' : ''
+                }`}
+              />
+            </div>
+          </button>
+
+          <AnimatePresence>
+            {expandedItem === `${item.year}-${item.type}` && (
+              <motion.div
+                initial={{ height: 0 }}
+                animate={{ height: 'auto' }}
+                exit={{ height: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden"
+              >
+                <div className="px-4 pb-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <h4 className="font-medium mb-2">Jantan</h4>
+                      <p className="text-xl font-semibold text-blue-600">
+                        {item.male} ekor
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <h4 className="font-medium mb-2">Betina</h4>
+                      <p className="text-xl font-semibold text-pink-600">
+                        {item.female} ekor
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <h4 className="font-medium mb-2">Total</h4>
+                      <p className="text-xl font-semibold text-primary-600">
+                        {item.total} ekor
+                      </p>
+                    </div>
+                  </div>
+                  {(item.male > 0 || item.female > 0) && (
+                    <div className="mt-4">
+                      <div className="h-4 bg-gray-200 rounded-full overflow-hidden">
+                        <div
+                          className="h-full float-left bg-blue-500"
+                          style={{
+                            width: `${(item.male / item.total) * 100}%`
+                          }}
+                        />
+                        <div
+                          className="h-full float-left bg-pink-500"
+                          style={{
+                            width: `${(item.female / item.total) * 100}%`
+                          }}
+                        />
+                      </div>
+                      <div className="mt-2 flex gap-4 text-sm">
+                        <div className="flex items-center">
+                          <div className="w-3 h-3 rounded-full bg-blue-500 mr-1" />
+                          <span>Jantan ({((item.male / item.total) * 100).toFixed(1)}%)</span>
+                        </div>
+                        <div className="flex items-center">
+                          <div className="w-3 h-3 rounded-full bg-pink-500 mr-1" />
+                          <span>Betina ({((item.female / item.total) * 100).toFixed(1)}%)</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      ))}
+    </div>
+  );
+
   const renderContent = () => {
     switch (activeTab) {
       case 0:
@@ -543,6 +744,8 @@ const AgricultureStats: React.FC = () => {
             ))}
           </div>
         );
+      case 6:
+        return renderLivestockData();
       default:
         return null;
     }
@@ -560,12 +763,11 @@ const AgricultureStats: React.FC = () => {
         >
           <h2 className="section-title">Statistik Pertanian</h2>
           <p className="text-gray-600 max-w-3xl mx-auto">
-            Data produksi pertanian, perkebunan, dan hasil alam lainnya di Desa Sindangjaya
+            Data produksi pertanian, perkebunan, peternakan, dan hasil alam lainnya di Desa Sindangjaya
           </p>
         </motion.div>
 
         <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-          {/* Tab Navigation */}
           <div className="border-b">
             <div className="overflow-x-auto">
               <Swiper
@@ -594,7 +796,6 @@ const AgricultureStats: React.FC = () => {
             </div>
           </div>
 
-          {/* Content */}
           <div className="p-6">
             <AnimatePresence mode="wait">
               <motion.div
