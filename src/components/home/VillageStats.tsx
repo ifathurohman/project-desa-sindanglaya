@@ -56,7 +56,7 @@ const categories: StatCategory[] = [
   }
 ];
 
-const SHEET_ID = '19VYFhtCSVYf23PnGQqesF9Fo9v8sDzodDpyuIe2n_lI';
+const SHEET_ID = '1Kcpdx_2zS1RZWxj9SWhh3qX-Qy1mUtjoW37K_8MrzR4';
 const API_KEY = 'AIzaSyDimmCzkntWdTD6LNCkOQ0gHOtx1xcAHik'; // You'll need to provide this
 
 const VillageStats: React.FC = () => {
