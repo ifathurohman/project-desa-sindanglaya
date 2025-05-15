@@ -1,101 +1,93 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { PieChart, LineChart, Download } from 'lucide-react';
+import { PieChart, LineChart, Download, TrendingUp, TrendingDown, Wallet, Building2, Users, Hammer, Shield } from 'lucide-react';
+import { Cell, Pie, PieChart as RechartsPieChart, ResponsiveContainer, LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
-interface BudgetItem {
-  id: number;
-  category: string;
+interface BudgetCategory {
+  name: string;
   amount: number;
-  percentage: number;
-  description: string;
+  icon: React.ElementType;
+  color: string;
 }
 
-const incomeSources: BudgetItem[] = [
+const incomeData = [
+  { year: 2021, amount: 2751508500 },
+  { year: 2022, amount: 2071185900 },
+  { year: 2023, amount: 2696734700 }
+];
+
+const expenditureData = [
   {
-    id: 1,
-    category: 'Dana Desa',
-    amount: 802305000,
-    percentage: 54.2,
-    description: 'Alokasi Dana Desa dari pemerintah pusat'
+    year: 2021,
+    "Penyelenggaraan Pemerintahan": 939386164,
+    "Pembangunan Desa": 1612497000,
+    "Pembinaan Kemasyarakatan": 84085000,
+    "Pemberdayaan Masyarakat": 9500000,
+    "Penanggulangan Bencana": 108000000
   },
   {
-    id: 2,
-    category: 'Alokasi Dana Desa',
-    amount: 388272000,
-    percentage: 26.2,
-    description: 'Dana dari kabupaten untuk operasional pemerintahan desa'
+    year: 2022,
+    "Penyelenggaraan Pemerintahan": 794954971,
+    "Pembangunan Desa": 662700000,
+    "Pembinaan Kemasyarakatan": 98679700,
+    "Pemberdayaan Masyarakat": 16139000,
+    "Penanggulangan Bencana": 457200000
   },
   {
-    id: 3,
-    category: 'Bagi Hasil Pajak',
-    amount: 94218000,
-    percentage: 6.4,
-    description: 'Dana bagi hasil pajak dan retribusi daerah'
-  },
-  {
-    id: 4,
-    category: 'Bantuan Keuangan',
-    amount: 180000000,
-    percentage: 12.2,
-    description: 'Bantuan keuangan dari provinsi dan kabupaten'
-  },
-  {
-    id: 5,
-    category: 'Pendapatan Asli Desa',
-    amount: 15000000,
-    percentage: 1.0,
-    description: 'Pendapatan dari aset dan usaha desa'
+    year: 2023,
+    "Penyelenggaraan Pemerintahan": 895988857,
+    "Pembangunan Desa": 1426525000,
+    "Pembinaan Kemasyarakatan": 150835900,
+    "Pemberdayaan Masyarakat": 19475000,
+    "Penanggulangan Bencana": 154800000
   }
 ];
 
-const expenditures: BudgetItem[] = [
+const categories2023: BudgetCategory[] = [
   {
-    id: 1,
-    category: 'Bidang Penyelenggaraan Pemerintahan',
-    amount: 371600000,
-    percentage: 25.1,
-    description: 'Operasional pemerintahan desa dan pembayaran gaji perangkat desa'
+    name: "Penyelenggaraan Pemerintahan",
+    amount: 895988857,
+    icon: Building2,
+    color: "#4F46E5"
   },
   {
-    id: 2,
-    category: 'Bidang Pelaksanaan Pembangunan',
-    amount: 712415000,
-    percentage: 48.1,
-    description: 'Pembangunan infrastruktur dan fasilitas desa'
+    name: "Pembangunan Desa",
+    amount: 1426525000,
+    icon: Hammer,
+    color: "#059669"
   },
   {
-    id: 3,
-    category: 'Bidang Pembinaan Kemasyarakatan',
-    amount: 214680000,
-    percentage: 14.5,
-    description: 'Program pemberdayaan masyarakat dan kegiatan sosial'
+    name: "Pembinaan Kemasyarakatan",
+    amount: 150835900,
+    icon: Users,
+    color: "#D97706"
   },
   {
-    id: 4,
-    category: 'Bidang Pemberdayaan Masyarakat',
-    amount: 156100000,
-    percentage: 10.5,
-    description: 'Pelatihan keterampilan dan pengembangan ekonomi desa'
+    name: "Pemberdayaan Masyarakat",
+    amount: 19475000,
+    icon: TrendingUp,
+    color: "#DC2626"
   },
   {
-    id: 5,
-    category: 'Bidang Penanggulangan Bencana',
-    amount: 25000000,
-    percentage: 1.7,
-    description: 'Dana untuk penanggulangan bencana dan keadaan darurat'
+    name: "Penanggulangan Bencana",
+    amount: 154800000,
+    icon: Shield,
+    color: "#7C3AED"
   }
 ];
-
-const formatCurrency = (amount: number): string => {
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0
-  }).format(amount);
-};
 
 const BudgetTransparency: React.FC = () => {
+  const formatCurrency = (amount: number): string => {
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(amount);
+  };
+
+  const totalBudget2023 = categories2023.reduce((sum, category) => sum + category.amount, 0);
+
   return (
     <div>
       <motion.div
@@ -109,60 +101,70 @@ const BudgetTransparency: React.FC = () => {
           <div className="p-6 border-b">
             <div className="flex items-center">
               <div className="w-10 h-10 rounded-lg bg-primary-100 text-primary-600 flex items-center justify-center mr-4">
-                <PieChart size={20} />
+                <Wallet size={20} />
               </div>
               <div>
-                <h3 className="text-xl font-semibold">APBDes Desa Kersik 2024</h3>
-                <p className="text-gray-600">Total Anggaran: {formatCurrency(1479795000)}</p>
+                <h3 className="text-xl font-semibold">APBDes Desa Sindangjaya 2023</h3>
+                <p className="text-gray-600">Total Anggaran: {formatCurrency(totalBudget2023)}</p>
               </div>
             </div>
           </div>
 
           <div className="p-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Income Section */}
+              {/* Budget Distribution Chart */}
               <div>
-                <h4 className="text-lg font-semibold mb-4">Pendapatan Desa</h4>
-                <div className="space-y-4">
-                  {incomeSources.map((item) => (
-                    <div key={item.id} className="bg-gray-50 p-4 rounded-lg">
-                      <div className="flex justify-between items-center mb-2">
-                        <h5 className="font-medium">{item.category}</h5>
-                        <span className="text-sm font-medium bg-green-100 text-green-800 px-2 py-1 rounded-full">
-                          {item.percentage}%
-                        </span>
-                      </div>
-                      <p className="text-gray-600 text-sm mb-2">{item.description}</p>
-                      <div className="font-semibold text-primary-700">{formatCurrency(item.amount)}</div>
-                      <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-green-500 h-2 rounded-full" 
-                          style={{ width: `${item.percentage}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                  ))}
+                <h4 className="text-lg font-semibold mb-6">Distribusi Anggaran 2023</h4>
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <RechartsPieChart>
+                      <Pie
+                        data={categories2023}
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={120}
+                        fill="#8884d8"
+                        dataKey="amount"
+                        nameKey="name"
+                        label={({ name, percent }) => `${name} (${(percent * 100).toFixed(1)}%)`}
+                      >
+                        {categories2023.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        formatter={(value: number) => formatCurrency(value)}
+                      />
+                    </RechartsPieChart>
+                  </ResponsiveContainer>
                 </div>
               </div>
 
-              {/* Expenditure Section */}
+              {/* Budget Categories */}
               <div>
-                <h4 className="text-lg font-semibold mb-4">Belanja Desa</h4>
+                <h4 className="text-lg font-semibold mb-6">Rincian Anggaran</h4>
                 <div className="space-y-4">
-                  {expenditures.map((item) => (
-                    <div key={item.id} className="bg-gray-50 p-4 rounded-lg">
+                  {categories2023.map((category) => (
+                    <div key={category.name} className="bg-gray-50 p-4 rounded-lg">
                       <div className="flex justify-between items-center mb-2">
-                        <h5 className="font-medium">{item.category}</h5>
-                        <span className="text-sm font-medium bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                          {item.percentage}%
+                        <div className="flex items-center">
+                          <div className="w-8 h-8 rounded-lg flex items-center justify-center mr-3" style={{ backgroundColor: category.color + '20', color: category.color }}>
+                            <category.icon size={18} />
+                          </div>
+                          <h5 className="font-medium">{category.name}</h5>
+                        </div>
+                        <span className="text-sm font-medium px-2 py-1 rounded-full" style={{ backgroundColor: category.color + '20', color: category.color }}>
+                          {((category.amount / totalBudget2023) * 100).toFixed(1)}%
                         </span>
                       </div>
-                      <p className="text-gray-600 text-sm mb-2">{item.description}</p>
-                      <div className="font-semibold text-primary-700">{formatCurrency(item.amount)}</div>
+                      <div className="font-semibold text-primary-700">{formatCurrency(category.amount)}</div>
                       <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
                         <div 
-                          className="bg-blue-500 h-2 rounded-full" 
-                          style={{ width: `${item.percentage}%` }}
+                          className="h-2 rounded-full" 
+                          style={{ 
+                            width: `${(category.amount / totalBudget2023) * 100}%`,
+                            backgroundColor: category.color
+                          }}
                         ></div>
                       </div>
                     </div>
@@ -174,6 +176,7 @@ const BudgetTransparency: React.FC = () => {
         </div>
       </motion.div>
 
+      {/* Budget Trends */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -186,36 +189,63 @@ const BudgetTransparency: React.FC = () => {
               <div className="w-10 h-10 rounded-lg bg-secondary-100 text-secondary-600 flex items-center justify-center mr-4">
                 <LineChart size={20} />
               </div>
-              <h3 className="text-xl font-semibold">Laporan Realisasi APBDes</h3>
+              <h3 className="text-xl font-semibold">Tren Anggaran 2021-2023</h3>
             </div>
           </div>
 
           <div className="p-6">
-            <div className="space-y-4">
-              <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
-                <div className="bg-gray-50 p-4 rounded-lg sm:flex-1">
-                  <h4 className="font-medium mb-2">Triwulan I (Jan-Mar 2024)</h4>
-                  <div className="font-semibold text-primary-700 mb-2">{formatCurrency(369950000)}</div>
-                  <div className="text-sm text-gray-600">Realisasi 25% dari anggaran</div>
-                  <a href="#" className="mt-3 inline-flex items-center text-sm font-medium text-secondary-600 hover:text-secondary-800">
-                    <Download size={14} className="mr-1" /> 
-                    Unduh Laporan
-                  </a>
-                </div>
-                <div className="bg-gray-50 p-4 rounded-lg sm:flex-1">
-                  <h4 className="font-medium mb-2">Triwulan II (Apr-Jun 2024)</h4>
-                  <div className="font-semibold text-primary-700 mb-2">{formatCurrency(665907000)}</div>
-                  <div className="text-sm text-gray-600">Realisasi 45% dari anggaran</div>
-                  <a href="#" className="mt-3 inline-flex items-center text-sm font-medium text-secondary-600 hover:text-secondary-800">
-                    <Download size={14} className="mr-1" /> 
-                    Unduh Laporan
-                  </a>
-                </div>
-              </div>
-              
-              <p className="text-gray-600 text-sm mt-4">
-                * Laporan yang tersedia diperbarui setiap triwulan. Laporan Triwulan III dan IV akan diunggah setelah periode tersebut berakhir.
-              </p>
+            <div className="h-96">
+              <ResponsiveContainer width="100%" height="100%">
+                <RechartsLineChart
+                  data={expenditureData}
+                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="year" />
+                  <YAxis tickFormatter={(value) => `${(value / 1000000000).toFixed(1)} M`} />
+                  <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                  <Legend />
+                  <Line type="monotone" dataKey="Penyelenggaraan Pemerintahan" stroke="#4F46E5" />
+                  <Line type="monotone" dataKey="Pembangunan Desa" stroke="#059669" />
+                  <Line type="monotone" dataKey="Pembinaan Kemasyarakatan" stroke="#D97706" />
+                  <Line type="monotone" dataKey="Pemberdayaan Masyarakat" stroke="#DC2626" />
+                  <Line type="monotone" dataKey="Penanggulangan Bencana" stroke="#7C3AED" />
+                </RechartsLineChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
+              {[2021, 2022, 2023].map((year, index) => {
+                const yearData = expenditureData.find(d => d.year === year);
+                const total = yearData ? Object.entries(yearData).reduce((sum, [key, value]) => 
+                  key !== 'year' ? sum + value : sum, 0
+                ) : 0;
+
+                return (
+                  <div key={year} className="bg-gray-50 p-4 rounded-lg">
+                    <h4 className="font-medium mb-2">Tahun {year}</h4>
+                    <div className="font-semibold text-primary-700 mb-2">{formatCurrency(total)}</div>
+                    <div className="flex items-center text-sm">
+                      {index > 0 && (
+                        <>
+                          {total > expenditureData[index - 1].year ? (
+                            <TrendingUp size={16} className="text-green-500 mr-1" />
+                          ) : (
+                            <TrendingDown size={16} className="text-red-500 mr-1" />
+                          )}
+                          <span className={total > expenditureData[index - 1].year ? 'text-green-600' : 'text-red-600'}>
+                            {Math.abs(((total - expenditureData[index - 1].year) / expenditureData[index - 1].year) * 100).toFixed(1)}% dari tahun sebelumnya
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="mt-8 text-sm text-gray-600">
+              * Data anggaran diperbarui setiap tahun sesuai dengan APBDes yang telah disahkan
             </div>
           </div>
         </div>
