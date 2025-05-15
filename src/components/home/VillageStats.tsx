@@ -81,8 +81,8 @@ const categories: StatCategory[] = [
   }
 ];
 
-// Updated Google Sheets URL format for more reliable access
-const SHEET_ID = 'e/2PACX-1vQHcVtU-HGxICiVkrJBGi7YKWUqwkB-0v8qxBsqY_BKyB-J9ZQ2b_lZYXXN_Vtk5Q';
+// Updated Google Sheets URL with correct Sheet ID
+const SHEET_ID = '1vQHcVtU-HGxICiVkrJBGi7YKWUqwkB-0v8qxBsqY_BKyB-J9ZQ2b_lZYXXN_Vtk5Q';
 const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/pub?output=csv&gid=0`;
 
 const VillageStats: React.FC = () => {
