@@ -1,37 +1,90 @@
-import React from 'react';
-import { Users, Home, Briefcase, GraduationCap } from 'lucide-react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronDown, Users, Home, Briefcase, GraduationCap, Building, Heart, Church, ShoppingBag, TreePine, FileText, Globe, BookOpen } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
 import CountUp from '../../utils/CountUp';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
-const ageData = [
-  { age: '0-4', male: 45, female: 42 },
-  { age: '5-9', male: 48, female: 45 },
-  { age: '10-14', male: 52, female: 49 },
-  { age: '15-19', male: 55, female: 51 },
-  { age: '20-24', male: 58, female: 54 },
-  { age: '25-29', male: 61, female: 57 },
-  { age: '30-34', male: 64, female: 60 },
-  { age: '35-39', male: 67, female: 63 },
-  { age: '40-44', male: 70, female: 66 },
-  { age: '45-49', male: 73, female: 69 },
-  { age: '50-54', male: 76, female: 72 },
-  { age: '55-59', male: 79, female: 75 },
-  { age: '60-64', male: 82, female: 78 },
-  { age: '65+', male: 85, female: 81 }
+interface StatCategory {
+  id: string;
+  title: string;
+  icon: React.ElementType;
+  subcategories: string[];
+}
+
+const categories: StatCategory[] = [
+  {
+    id: 'demographics',
+    title: 'Demografi & Kependudukan',
+    icon: Users,
+    subcategories: ['PROPORSI', 'KEPENDUDUKAN', 'MIGRASI', 'DISTRIBUSI PENDUDUK', 'JENIS PEKERJAAN', 'JENIS AGAMA']
+  },
+  {
+    id: 'economy',
+    title: 'Ekonomi',
+    icon: Briefcase,
+    subcategories: ['EKONOMI', 'BELANJA DESA', 'KEUANGAN', 'KEUANGAN (2)']
+  },
+  {
+    id: 'infrastructure',
+    title: 'Infrastruktur & Utilitas',
+    icon: Building,
+    subcategories: ['HUNIAN', 'AIR', 'Prasarana Air Limbah', 'Prasarana Kelistrikan', 'Prasana Air Bersih', 'Prasana Drainase', 'Prasana Telekomunikasi']
+  },
+  {
+    id: 'facilities',
+    title: 'Fasilitas & Layanan Publik',
+    icon: Heart,
+    subcategories: ['Sarana Pendidikan', 'Sarana Kesehatan', 'Sarana Peribadatan', 'Sarana Perdangan dan Jasa', 'SARANA REKREASI, RTH, LAPANGAN', 'JUMLAH SARANA', 'Prasana Persampahan']
+  },
+  {
+    id: 'social',
+    title: 'Sosial & Budaya',
+    icon: Globe,
+    subcategories: ['SOSIAL BUDAYA', 'HUBUNGAN EKSTERNALITAS']
+  },
+  {
+    id: 'governance',
+    title: 'Pemerintahan & Kelembagaan',
+    icon: FileText,
+    subcategories: ['KELEMBAGAAN', 'LPP DUSUN', 'LPP RW', 'ANALISIS KEBIJAKAN']
+  },
+  {
+    id: 'programs',
+    title: 'Program & Perencanaan',
+    icon: BookOpen,
+    subcategories: ['INDIKASI PROGRAM']
+  }
 ];
 
-const educationData = [
-  { name: 'Tidak Sekolah', value: 45 },
-  { name: 'SD/Sederajat', value: 198 },
-  { name: 'SLTP/Sederajat', value: 287 },
-  { name: 'SLTA/Sederajat', value: 425 },
-  { name: 'Diploma/Sarjana', value: 243 }
-];
-
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
+const SHEET_ID = '19VYFhtCSVYf23PnGQqesF9Fo9v8sDzodDpyuIe2n_lI';
+const API_KEY = 'YOUR_GOOGLE_SHEETS_API_KEY'; // You'll need to provide this
 
 const VillageStats: React.FC = () => {
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+  const [expandedSubcategory, setExpandedSubcategory] = useState<string | null>(null);
+
+  const { data: sheetData, isLoading, error } = useQuery({
+    queryKey: ['villageStats'],
+    queryFn: async () => {
+      const response = await fetch(
+        `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Sheet1!A:Z?key=${API_KEY}`
+      );
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    }
+  });
+
+  const toggleCategory = (categoryId: string) => {
+    setExpandedCategory(expandedCategory === categoryId ? null : categoryId);
+    setExpandedSubcategory(null);
+  };
+
+  const toggleSubcategory = (subcategory: string) => {
+    setExpandedSubcategory(expandedSubcategory === subcategory ? null : subcategory);
+  };
+
   return (
     <section className="section bg-gray-50">
       <div className="container">
@@ -44,150 +97,94 @@ const VillageStats: React.FC = () => {
         >
           <h2 className="section-title">Infografis Desa Kersik</h2>
           <p className="text-gray-600 max-w-3xl mx-auto">
-            Data demografi dan statistik terkini mengenai penduduk Desa Kersik
+            Data statistik dan informasi terkini mengenai berbagai aspek di Desa Kersik
           </p>
         </motion.div>
 
-        {/* Demografi Penduduk */}
-        <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
-          <h3 className="text-xl font-semibold mb-6">Demografi Penduduk</h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-red-50 p-4 rounded-lg">
-              <div className="flex items-center mb-2">
-                <Users className="w-5 h-5 text-red-600 mr-2" />
-                <span className="text-sm font-medium">Total Penduduk</span>
-              </div>
-              <div className="text-2xl font-bold text-red-700">
-                <CountUp end={1153} /> Jiwa
-              </div>
-            </div>
-
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <div className="flex items-center mb-2">
-                <Users className="w-5 h-5 text-blue-600 mr-2" />
-                <span className="text-sm font-medium">Laki-laki</span>
-              </div>
-              <div className="text-2xl font-bold text-blue-700">
-                <CountUp end={607} /> Jiwa
-              </div>
-            </div>
-
-            <div className="bg-pink-50 p-4 rounded-lg">
-              <div className="flex items-center mb-2">
-                <Users className="w-5 h-5 text-pink-600 mr-2" />
-                <span className="text-sm font-medium">Perempuan</span>
-              </div>
-              <div className="text-2xl font-bold text-pink-700">
-                <CountUp end={546} /> Jiwa
-              </div>
-            </div>
-
-            <div className="bg-green-50 p-4 rounded-lg">
-              <div className="flex items-center mb-2">
-                <Home className="w-5 h-5 text-green-600 mr-2" />
-                <span className="text-sm font-medium">Kepala Keluarga</span>
-              </div>
-              <div className="text-2xl font-bold text-green-700">
-                <CountUp end={304} /> KK
-              </div>
-            </div>
+        {isLoading ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Memuat data...</p>
           </div>
-        </div>
-
-        {/* Piramida Penduduk */}
-        <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
-          <h3 className="text-xl font-semibold mb-6">Berdasarkan Kelompok Umur</h3>
-          <div className="h-96">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                layout="vertical"
-                data={ageData}
-                margin={{ top: 20, right: 30, left: 40, bottom: 5 }}
+        ) : error ? (
+          <div className="text-center py-12 text-error-600">
+            <p>Terjadi kesalahan saat memuat data. Silakan coba lagi nanti.</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {categories.map((category) => (
+              <motion.div
+                key={category.id}
+                initial={false}
+                className="bg-white rounded-xl shadow-sm overflow-hidden"
               >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis type="number" />
-                <YAxis dataKey="age" type="category" />
-                <Tooltip />
-                <Bar dataKey="male" fill="#3b82f6" name="Laki-laki" />
-                <Bar dataKey="female" fill="#ec4899" name="Perempuan" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        {/* Berdasarkan Pendidikan */}
-        <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
-          <h3 className="text-xl font-semibold mb-6">Berdasarkan Pendidikan</h3>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={educationData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                  >
-                    {educationData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {educationData.map((item, index) => (
-                <div key={item.name} className="p-4 border rounded-lg">
-                  <div className="text-2xl font-bold text-primary-600 mb-2">
-                    <CountUp end={item.value} />
+                <button
+                  onClick={() => toggleCategory(category.id)}
+                  className="w-full px-6 py-4 flex items-center justify-between text-left"
+                >
+                  <div className="flex items-center">
+                    <category.icon className="w-5 h-5 text-primary-600 mr-3" />
+                    <h3 className="text-lg font-semibold">{category.title}</h3>
                   </div>
-                  <p className="text-sm text-gray-600">{item.name}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+                  <ChevronDown
+                    className={`w-5 h-5 transition-transform ${
+                      expandedCategory === category.id ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
 
-        {/* Berdasarkan Pekerjaan */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h3 className="text-xl font-semibold mb-6">Berdasarkan Pekerjaan</h3>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="p-4 border rounded-lg text-center">
-              <div className="text-2xl font-bold text-primary-600 mb-2">
-                <CountUp end={323} />
-              </div>
-              <p className="text-sm text-gray-600">Pegawai/Karyawan</p>
-            </div>
-            
-            <div className="p-4 border rounded-lg text-center">
-              <div className="text-2xl font-bold text-primary-600 mb-2">
-                <CountUp end={270} />
-              </div>
-              <p className="text-sm text-gray-600">Mengurus Rumah Tangga</p>
-            </div>
-            
-            <div className="p-4 border rounded-lg text-center">
-              <div className="text-2xl font-bold text-primary-600 mb-2">
-                <CountUp end={177} />
-              </div>
-              <p className="text-sm text-gray-600">Pelajar/Mahasiswa</p>
-            </div>
-            
-            <div className="p-4 border rounded-lg text-center">
-              <div className="text-2xl font-bold text-primary-600 mb-2">
-                <CountUp end={51} />
-              </div>
-              <p className="text-sm text-gray-600">Wiraswasta</p>
-            </div>
+                <AnimatePresence>
+                  {expandedCategory === category.id && (
+                    <motion.div
+                      initial={{ height: 0 }}
+                      animate={{ height: 'auto' }}
+                      exit={{ height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-6 pb-4 space-y-2">
+                        {category.subcategories.map((subcategory) => (
+                          <div key={subcategory} className="border rounded-lg">
+                            <button
+                              onClick={() => toggleSubcategory(subcategory)}
+                              className="w-full px-4 py-3 flex items-center justify-between text-left"
+                            >
+                              <span className="font-medium">{subcategory}</span>
+                              <ChevronDown
+                                className={`w-4 h-4 transition-transform ${
+                                  expandedSubcategory === subcategory ? 'rotate-180' : ''
+                                }`}
+                              />
+                            </button>
+
+                            <AnimatePresence>
+                              {expandedSubcategory === subcategory && (
+                                <motion.div
+                                  initial={{ height: 0 }}
+                                  animate={{ height: 'auto' }}
+                                  exit={{ height: 0 }}
+                                  transition={{ duration: 0.2 }}
+                                  className="overflow-hidden"
+                                >
+                                  <div className="px-4 pb-4">
+                                    {/* Here you would render the actual data from the Google Sheet */}
+                                    <p className="text-gray-600">
+                                      Data untuk {subcategory} akan ditampilkan di sini
+                                    </p>
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            ))}
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
