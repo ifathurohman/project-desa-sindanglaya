@@ -81,9 +81,9 @@ const categories: StatCategory[] = [
   }
 ];
 
-// Updated Google Sheets URL with a valid Sheet ID and gid
-const SHEET_ID = '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms';
-const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/pub?output=csv`;
+// Using a sample public Google Sheet for testing
+const SHEET_ID = '1x5jgXCxZjbAG2KfAiOWPH9kMJVQyHQqJZ_ZkLKKnwJE';
+const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
 
 const VillageStats: React.FC = () => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
