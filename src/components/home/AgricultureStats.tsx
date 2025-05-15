@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Sprout, Fish, Trees as Tree, Mountain, Beaker, Factory } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -16,6 +16,14 @@ interface BaseProductionData {
   productionValue?: number;
   productionCost?: number;
   productionBalance?: number;
+}
+
+interface PlantationData extends BaseProductionData {
+  privateArea?: number;
+  privateProduction?: number;
+  publicArea?: number;
+  publicProduction?: number;
+  totalArea?: number;
 }
 
 interface AquacultureData {
@@ -51,11 +59,178 @@ const agricultureData: BaseProductionData[] = [
     productionCost: 2750000,
     productionBalance: 12250000
   },
-  // Add all agriculture data...
+  {
+    year: 2015,
+    commodity: "Kacang Kedelai",
+    harvestedArea: 1.5,
+    production: 1.05,
+    productionValue: 15000000,
+    productionCost: 5400000,
+    productionBalance: 9600000
+  },
+  {
+    year: 2015,
+    commodity: "Terong",
+    harvestedArea: 0.25,
+    production: 3.00,
+    productionValue: 450000,
+    productionCost: 5200000,
+    productionBalance: -4750000
+  },
+  {
+    year: 2015,
+    commodity: "Bayam",
+    harvestedArea: 0.5,
+    production: 2,
+    productionValue: 0,
+    productionCost: 0,
+    productionBalance: 0
+  },
+  {
+    year: 2015,
+    commodity: "Kangkung",
+    harvestedArea: 0.5,
+    production: 2.5,
+    productionValue: 10000000,
+    productionCost: 7600000,
+    productionBalance: 2400000
+  },
+  {
+    year: 2015,
+    commodity: "Umbi-umbian",
+    harvestedArea: 3.5,
+    production: 26.25,
+    productionValue: 35000000,
+    productionCost: 4800000,
+    productionBalance: 30200000
+  },
+  {
+    year: 2015,
+    commodity: "Talas",
+    harvestedArea: 1,
+    production: 5,
+    productionValue: 12000000,
+    productionCost: 3200000,
+    productionBalance: 8800000
+  },
+  {
+    year: 2015,
+    commodity: "Kacang Tanah",
+    harvestedArea: 3,
+    production: 3.6,
+    productionValue: 35000000,
+    productionCost: 4800000,
+    productionBalance: 30200000
+  },
+  {
+    year: 2015,
+    commodity: "Kacang Panjang",
+    harvestedArea: 1,
+    production: 5,
+    productionValue: 9500000,
+    productionCost: 1000000,
+    productionBalance: 8500000
+  },
+  {
+    year: 2015,
+    commodity: "Kacang Merah",
+    harvestedArea: 2,
+    production: 6,
+    productionValue: 15000000,
+    productionCost: 4850000,
+    productionBalance: 10150000
+  },
+  {
+    year: 2015,
+    commodity: "Ubi Kayu",
+    harvestedArea: 16,
+    production: 624,
+    productionValue: 30000000,
+    productionCost: 6000000,
+    productionBalance: 24000000
+  },
+  {
+    year: 2022,
+    commodity: "Tomat",
+    harvestedArea: 4,
+    production: 92,
+    productionValue: 46000000,
+    productionCost: 18000000,
+    productionBalance: 28000000
+  },
+  {
+    year: 2022,
+    commodity: "Padi Sawah",
+    harvestedArea: 130,
+    production: 650,
+    productionValue: 4550000000,
+    productionCost: 545000000,
+    productionBalance: 4005000000
+  },
+  {
+    year: 2015,
+    commodity: "Jagung",
+    harvestedArea: 4,
+    production: 1500,
+    productionValue: 16750000,
+    productionCost: 5200000,
+    productionBalance: 11550000
+  },
+  {
+    year: 2025,
+    commodity: "Cabe",
+    harvestedArea: 4,
+    production: 25.2,
+    productionValue: 37800000,
+    productionCost: 21000000,
+    productionBalance: 16800000
+  },
+  {
+    year: 2015,
+    commodity: "Ubi Jalar",
+    harvestedArea: 3.5,
+    production: 87.5,
+    productionValue: 1500000,
+    productionCost: 4300000,
+    productionBalance: -2800000
+  },
+  {
+    year: 2015,
+    commodity: "Sawi",
+    harvestedArea: 0.15,
+    production: 0.9,
+    productionValue: 0,
+    productionCost: 0,
+    productionBalance: 0
+  }
 ];
 
 // Plantation Data
-const plantationData: BaseProductionData[] = [
+const plantationData: PlantationData[] = [
+  {
+    year: 2022,
+    commodity: "Kopi",
+    privateArea: 0,
+    privateProduction: 0,
+    publicArea: 2.00,
+    publicProduction: 40.00,
+    totalArea: 2.00,
+    productionValue: 40000000,
+    productionCost: 30000000,
+    productionBalance: 10000000
+  },
+  {
+    year: 2025,
+    commodity: "Cengkeh",
+    privateArea: 0,
+    privateProduction: 0,
+    publicArea: 1.00,
+    publicProduction: 20.00,
+    totalArea: 1.00,
+    productionValue: 10000000,
+    productionCost: 4000000,
+    productionBalance: 6000000
+  },
   {
     year: 2022,
     commodity: "Alpukat",
@@ -68,7 +243,30 @@ const plantationData: BaseProductionData[] = [
     harvestedArea: 1,
     production: 4
   },
-  // Add all plantation data...
+  {
+    year: 2025,
+    commodity: "Pisang",
+    harvestedArea: 9.5,
+    production: 114
+  },
+  {
+    year: 2015,
+    commodity: "Pepaya",
+    harvestedArea: 0.5,
+    production: 0.5
+  },
+  {
+    year: 2022,
+    commodity: "Talas",
+    harvestedArea: 0.5,
+    production: 2.5
+  },
+  {
+    year: 2015,
+    commodity: "Mangga",
+    harvestedArea: 2,
+    production: 13
+  }
 ];
 
 // Biopharmaca Data
@@ -85,7 +283,30 @@ const biopharmacaData: BaseProductionData[] = [
     harvestedArea: 12.5,
     production: 200
   },
-  // Add all biopharmaca data...
+  {
+    year: 2015,
+    commodity: "Kumis Kucing",
+    harvestedArea: 0.8,
+    production: 0.8
+  },
+  {
+    year: 2022,
+    commodity: "Kunyit",
+    harvestedArea: 2.5,
+    production: 12.5
+  },
+  {
+    year: 2015,
+    commodity: "Kencur",
+    harvestedArea: 0.15,
+    production: 0.3
+  },
+  {
+    year: 2015,
+    commodity: "Lengkuas",
+    harvestedArea: 1,
+    production: 4
+  }
 ];
 
 // Forest Products Data
@@ -111,23 +332,42 @@ const miningData: MiningData[] = [
   },
   {
     year: 2025,
-    material: "Batu cadas",
+    material: "Batu Cadas",
     scale: "Kecil"
   },
-  // Add all mining data...
+  {
+    year: 2015,
+    material: "Tanah Liat",
+    scale: "-"
+  },
+  {
+    year: 2015,
+    material: "Pasir",
+    scale: "-"
+  },
+  {
+    year: 2024,
+    material: "Batu Gunung",
+    scale: "Kecil"
+  },
+  {
+    year: 2015,
+    material: "Batu Kali",
+    scale: "Kecil"
+  }
 ];
 
 // Aquaculture Data
 const aquacultureData: AquacultureData[] = [
   {
     year: 2025,
-    facility: "Sawah (M²)",
+    facility: "Sawah",
     area: 1.25,
     production: 4
   },
   {
     year: 2025,
-    facility: "Empang/Kolam (M²)",
+    facility: "Empang/Kolam",
     area: 2.5,
     production: 3.5
   }
@@ -139,7 +379,7 @@ const categories = [
   { id: 'biopharmaca', title: 'Biofarmaka', icon: Beaker },
   { id: 'forest', title: 'Hasil Hutan', icon: Tree },
   { id: 'mining', title: 'Galian', icon: Mountain },
-  { id: 'aquaculture', title: 'Budidaya Air', icon: Fish },
+  { id: 'aquaculture', title: 'Budidaya Air', icon: Fish }
 ];
 
 const AgricultureStats: React.FC = () => {
@@ -155,7 +395,7 @@ const AgricultureStats: React.FC = () => {
     }).format(value);
   };
 
-  const renderProductionData = (data: BaseProductionData[]) => (
+  const renderProductionData = (data: BaseProductionData[] | PlantationData[]) => (
     <div className="space-y-4">
       {data.map((item) => (
         <div key={`${item.year}-${item.commodity}`} className="border rounded-lg">
@@ -197,6 +437,28 @@ const AgricultureStats: React.FC = () => {
                         </p>
                       </div>
                     )}
+                    {'privateArea' in item && item.privateArea !== undefined && (
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        <h4 className="font-medium mb-2">Luas Perkebunan Swasta</h4>
+                        <p className="text-xl font-semibold text-primary-600">
+                          {item.privateArea.toFixed(2)} Ha
+                        </p>
+                        <p className="text-sm text-gray-600 mt-1">
+                          Produksi: {item.privateProduction?.toFixed(2)} Ton
+                        </p>
+                      </div>
+                    )}
+                    {'publicArea' in item && item.publicArea !== undefined && (
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        <h4 className="font-medium mb-2">Luas Perkebunan Rakyat</h4>
+                        <p className="text-xl font-semibold text-primary-600">
+                          {item.publicArea.toFixed(2)} Ha
+                        </p>
+                        <p className="text-sm text-gray-600 mt-1">
+                          Produksi: {item.publicProduction?.toFixed(2)} Ton
+                        </p>
+                      </div>
+                    )}
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <h4 className="font-medium mb-2">Produksi</h4>
                       <p className="text-xl font-semibold text-primary-600">
@@ -208,6 +470,24 @@ const AgricultureStats: React.FC = () => {
                         <h4 className="font-medium mb-2">Nilai Produksi</h4>
                         <p className="text-xl font-semibold text-green-600">
                           {formatCurrency(item.productionValue)}
+                        </p>
+                      </div>
+                    )}
+                    {item.productionCost !== undefined && (
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        <h4 className="font-medium mb-2">Biaya Produksi</h4>
+                        <p className="text-xl font-semibold text-red-600">
+                          {formatCurrency(item.productionCost)}
+                        </p>
+                      </div>
+                    )}
+                    {item.productionBalance !== undefined && (
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        <h4 className="font-medium mb-2">Saldo Produksi</h4>
+                        <p className={`text-xl font-semibold ${
+                          item.productionBalance >= 0 ? 'text-green-600' : 'text-red-600'
+                        }`}>
+                          {formatCurrency(item.productionBalance)}
                         </p>
                       </div>
                     )}
