@@ -1,88 +1,63 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Users, Building, Briefcase, Globe, FileText, BookOpen, Heart } from 'lucide-react';
+import { ChevronDown, Users, Home, Briefcase, GraduationCap, Building, Heart, Church, ShoppingBag, TreePine, FileText, Globe, BookOpen } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import Papa from 'papaparse';
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  LineChart,
-  Line
-} from 'recharts';
+import CountUp from '../../utils/CountUp';
 
 interface StatCategory {
   id: string;
   title: string;
   icon: React.ElementType;
   subcategories: string[];
-  chartType?: 'bar' | 'pie' | 'line';
 }
-
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
 
 const categories: StatCategory[] = [
   {
     id: 'demographics',
     title: 'Demografi & Kependudukan',
     icon: Users,
-    subcategories: ['PROPORSI', 'KEPENDUDUKAN', 'MIGRASI', 'DISTRIBUSI PENDUDUK', 'JENIS PEKERJAAN', 'JENIS AGAMA'],
-    chartType: 'pie'
+    subcategories: ['PROPORSI', 'KEPENDUDUKAN', 'MIGRASI', 'DISTRIBUSI PENDUDUK', 'JENIS PEKERJAAN', 'JENIS AGAMA']
   },
   {
     id: 'economy',
     title: 'Ekonomi',
     icon: Briefcase,
-    subcategories: ['EKONOMI', 'BELANJA DESA', 'KEUANGAN', 'KEUANGAN (2)'],
-    chartType: 'bar'
+    subcategories: ['EKONOMI', 'BELANJA DESA', 'KEUANGAN', 'KEUANGAN (2)']
   },
   {
     id: 'infrastructure',
     title: 'Infrastruktur & Utilitas',
     icon: Building,
-    subcategories: ['HUNIAN', 'AIR', 'Prasarana Air Limbah', 'Prasarana Kelistrikan', 'Prasana Air Bersih', 'Prasana Drainase', 'Prasana Telekomunikasi'],
-    chartType: 'bar'
+    subcategories: ['HUNIAN', 'AIR', 'Prasarana Air Limbah', 'Prasarana Kelistrikan', 'Prasana Air Bersih', 'Prasana Drainase', 'Prasana Telekomunikasi']
   },
   {
     id: 'facilities',
     title: 'Fasilitas & Layanan Publik',
     icon: Heart,
-    subcategories: ['Sarana Pendidikan', 'Sarana Kesehatan', 'Sarana Peribadatan', 'Sarana Perdangan dan Jasa', 'SARANA REKREASI, RTH, LAPANGAN', 'JUMLAH SARANA', 'Prasana Persampahan'],
-    chartType: 'bar'
+    subcategories: ['Sarana Pendidikan', 'Sarana Kesehatan', 'Sarana Peribadatan', 'Sarana Perdangan dan Jasa', 'SARANA REKREASI, RTH, LAPANGAN', 'JUMLAH SARANA', 'Prasana Persampahan']
   },
   {
     id: 'social',
     title: 'Sosial & Budaya',
     icon: Globe,
-    subcategories: ['SOSIAL BUDAYA', 'HUBUNGAN EKSTERNALITAS'],
-    chartType: 'pie'
+    subcategories: ['SOSIAL BUDAYA', 'HUBUNGAN EKSTERNALITAS']
   },
   {
     id: 'governance',
     title: 'Pemerintahan & Kelembagaan',
     icon: FileText,
-    subcategories: ['KELEMBAGAAN', 'LPP DUSUN', 'LPP RW', 'ANALISIS KEBIJAKAN'],
-    chartType: 'line'
+    subcategories: ['KELEMBAGAAN', 'LPP DUSUN', 'LPP RW', 'ANALISIS KEBIJAKAN']
   },
   {
     id: 'programs',
     title: 'Program & Perencanaan',
     icon: BookOpen,
-    subcategories: ['INDIKASI PROGRAM'],
-    chartType: 'bar'
+    subcategories: ['INDIKASI PROGRAM']
   }
 ];
 
-// Use the provided Google Sheets URL
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTEBITQP-miuYwohBheKzNYnVopTufMvg_J6zsADOAUnr-KcKwJdN9LSRfxliCdbUYqKqwv0cjzWzRU/pub?output=csv';
+const SHEET_ID = '19VYFhtCSVYf23PnGQqesF9Fo9v8sDzodDpyuIe2n_lI';
+const API_KEY = 'YOUR_GOOGLE_SHEETS_API_KEY'; // You'll need to provide this
 
 const VillageStats: React.FC = () => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
@@ -91,36 +66,14 @@ const VillageStats: React.FC = () => {
   const { data: sheetData, isLoading, error } = useQuery({
     queryKey: ['villageStats'],
     queryFn: async () => {
-      try {
-        const response = await fetch(SHEET_URL);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const csvText = await response.text();
-        
-        return new Promise((resolve, reject) => {
-          Papa.parse(csvText, {
-            header: true,
-            skipEmptyLines: true,
-            complete: (results) => {
-              if (results.errors.length > 0) {
-                reject(new Error('Failed to parse CSV data'));
-                return;
-              }
-              resolve(results.data);
-            },
-            error: (error) => {
-              reject(error);
-            }
-          });
-        });
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        throw error;
+      const response = await fetch(
+        `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Sheet1!A:Z?key=${API_KEY}`
+      );
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
-    },
-    retry: 3,
-    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+      return response.json();
+    }
   });
 
   const toggleCategory = (categoryId: string) => {
@@ -130,80 +83,6 @@ const VillageStats: React.FC = () => {
 
   const toggleSubcategory = (subcategory: string) => {
     setExpandedSubcategory(expandedSubcategory === subcategory ? null : subcategory);
-  };
-
-  const getSubcategoryData = (subcategory: string) => {
-    if (!sheetData) return [];
-    return (sheetData as any[]).filter(row => row.Category === subcategory);
-  };
-
-  const formatChartData = (data: any[]) => {
-    return data.map(item => ({
-      name: item.Indicator,
-      value: parseFloat(item.Value) || 0
-    }));
-  };
-
-  const renderChart = (category: StatCategory, data: any[]) => {
-    const chartData = formatChartData(data);
-    const height = 300;
-
-    switch (category.chartType) {
-      case 'pie':
-        return (
-          <ResponsiveContainer width="100%" height={height}>
-            <PieChart>
-              <Pie
-                data={chartData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-              >
-                {chartData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
-        );
-
-      case 'bar':
-        return (
-          <ResponsiveContainer width="100%" height={height}>
-            <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="value" fill="#8884d8" />
-            </BarChart>
-          </ResponsiveContainer>
-        );
-
-      case 'line':
-        return (
-          <ResponsiveContainer width="100%" height={height}>
-            <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="value" stroke="#8884d8" />
-            </LineChart>
-          </ResponsiveContainer>
-        );
-
-      default:
-        return null;
-    }
   };
 
   return (
@@ -229,8 +108,7 @@ const VillageStats: React.FC = () => {
           </div>
         ) : error ? (
           <div className="text-center py-12 text-error-600">
-            <p>Terjadi kesalahan saat memuat data: {(error as Error).message}</p>
-            <p className="mt-2 text-sm">Pastikan Google Sheet telah dipublikasikan dan dapat diakses.</p>
+            <p>Terjadi kesalahan saat memuat data. Silakan coba lagi nanti.</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -264,7 +142,7 @@ const VillageStats: React.FC = () => {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <div className="px-6 pb-4 space-y-4">
+                      <div className="px-6 pb-4 space-y-2">
                         {category.subcategories.map((subcategory) => (
                           <div key={subcategory} className="border rounded-lg">
                             <button
@@ -289,20 +167,10 @@ const VillageStats: React.FC = () => {
                                   className="overflow-hidden"
                                 >
                                   <div className="px-4 pb-4">
-                                    {/* Chart Section */}
-                                    <div className="mb-6">
-                                      {renderChart(category, getSubcategoryData(subcategory))}
-                                    </div>
-
-                                    {/* Data Table Section */}
-                                    <div className="space-y-2">
-                                      {getSubcategoryData(subcategory).map((row: any, index: number) => (
-                                        <div key={index} className="flex justify-between items-center py-2 border-b">
-                                          <span className="text-gray-700">{row.Indicator}</span>
-                                          <span className="font-medium">{row.Value}</span>
-                                        </div>
-                                      ))}
-                                    </div>
+                                    {/* Here you would render the actual data from the Google Sheet */}
+                                    <p className="text-gray-600">
+                                      Data untuk {subcategory} akan ditampilkan di sini
+                                    </p>
                                   </div>
                                 </motion.div>
                               )}
