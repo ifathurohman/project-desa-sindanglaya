@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Users, Home, TrendingUp, BarChart, MapPin } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { Users, Home, TrendingUp, ArrowRight, ArrowLeft, MapPin } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar } from 'recharts';
 
 interface PopulationData {
   year: number;
@@ -16,6 +16,16 @@ interface RegionData {
   cisitu: number;
   nagrog: number;
   tugu: number;
+}
+
+interface MigrationData {
+  year: number;
+  population: number;
+  inMigration: number;
+  outMigration: number;
+  inRate: number;
+  outRate: number;
+  netMigration: number;
 }
 
 const populationData: PopulationData[] = [
@@ -34,6 +44,15 @@ const regionData: RegionData[] = [
   { year: 2022, cisitu: 2048, nagrog: 1457, tugu: 1255 },
   { year: 2023, cisitu: 2049, nagrog: 1464, tugu: 1271 },
   { year: 2024, cisitu: 2037, nagrog: 1497, tugu: 1262 }
+];
+
+const migrationData: MigrationData[] = [
+  { year: 2019, population: 4614, inMigration: 0, outMigration: 0, inRate: 0.00, outRate: 0.00, netMigration: 0 },
+  { year: 2020, population: 4662, inMigration: 6, outMigration: 0, inRate: 0.13, outRate: 0.00, netMigration: 6 },
+  { year: 2021, population: 4736, inMigration: 2, outMigration: 1, inRate: 0.04, outRate: 0.02, netMigration: 1 },
+  { year: 2022, population: 4759, inMigration: 5, outMigration: 0, inRate: 0.11, outRate: 0.00, netMigration: 5 },
+  { year: 2023, population: 4784, inMigration: 7, outMigration: 3, inRate: 0.15, outRate: 0.06, netMigration: 4 },
+  { year: 2024, population: 4797, inMigration: 9, outMigration: 2, inRate: 0.19, outRate: 0.04, netMigration: 7 }
 ];
 
 const housingData = [
@@ -211,6 +230,89 @@ const PopulationStats: React.FC = () => {
             </div>
           </motion.div>
         </div>
+
+        {/* Migration Statistics */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          viewport={{ once: true, margin: "-100px" }}
+          className="bg-white rounded-xl shadow-sm p-6 mb-8"
+        >
+          <div className="flex items-center mb-6">
+            <div className="w-12 h-12 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center mr-4">
+              <Users size={24} />
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold">Statistik Migrasi</h3>
+              <p className="text-gray-600">Perpindahan Penduduk {currentYear}</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="space-y-4">
+              <div className="bg-gray-50 rounded-lg p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center">
+                    <ArrowRight className="w-5 h-5 text-green-500 mr-2" />
+                    <h4 className="font-medium">Penduduk Masuk</h4>
+                  </div>
+                  <span className="text-sm bg-green-100 text-green-800 px-2 py-1 rounded-full">
+                    {migrationData[migrationData.length - 1].inRate.toFixed(2)}%
+                  </span>
+                </div>
+                <p className="text-2xl font-bold text-green-600">
+                  {migrationData[migrationData.length - 1].inMigration} orang
+                </p>
+              </div>
+
+              <div className="bg-gray-50 rounded-lg p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center">
+                    <ArrowLeft className="w-5 h-5 text-red-500 mr-2" />
+                    <h4 className="font-medium">Penduduk Keluar</h4>
+                  </div>
+                  <span className="text-sm bg-red-100 text-red-800 px-2 py-1 rounded-full">
+                    {migrationData[migrationData.length - 1].outRate.toFixed(2)}%
+                  </span>
+                </div>
+                <p className="text-2xl font-bold text-red-600">
+                  {migrationData[migrationData.length - 1].outMigration} orang
+                </p>
+              </div>
+
+              <div className="bg-gray-50 rounded-lg p-4">
+                <div className="flex items-center mb-2">
+                  <TrendingUp className="w-5 h-5 text-primary-500 mr-2" />
+                  <h4 className="font-medium">Migrasi Netto</h4>
+                </div>
+                <p className="text-2xl font-bold text-primary-600">
+                  {migrationData[migrationData.length - 1].netMigration} orang
+                </p>
+              </div>
+            </div>
+
+            <div className="lg:col-span-2">
+              <div className="h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={migrationData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="year" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar name="Penduduk Masuk" dataKey="inMigration" fill="#059669" />
+                    <Bar name="Penduduk Keluar" dataKey="outMigration" fill="#DC2626" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 text-sm text-gray-600">
+            * Data migrasi menunjukkan perpindahan penduduk masuk dan keluar dari Desa Sindangjaya
+          </div>
+        </motion.div>
 
         {/* Housing Statistics */}
         <motion.div
