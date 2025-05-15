@@ -8,6 +8,7 @@ import VillageOfficials from '../components/home/VillageOfficials';
 import AgricultureStats from '../components/home/AgricultureStats';
 import CultureSection from '../components/home/CultureSection';
 import PopulationStats from '../components/home/PopulationStats';
+import EducationFacilities from '../components/home/EducationFacilities';
 
 const HomePage: React.FC = () => {
   return (
@@ -15,6 +16,7 @@ const HomePage: React.FC = () => {
       <HeroSection />
       <VillageStats />
       <PopulationStats />
+      <EducationFacilities />
       <AgricultureStats />
       <CultureSection />
       <QuickLinks />
