@@ -81,9 +81,8 @@ const categories: StatCategory[] = [
   }
 ];
 
-// Update the Google Sheet URL to use the correct published CSV format
-const SHEET_ID = '1Kcpdx_2zS1RZWxj9SWhh3qX-Qy1mUtjoW37K_8MrzR4';
-const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+// Use the provided Google Sheets URL
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTEBITQP-miuYwohBheKzNYnVopTufMvg_J6zsADOAUnr-KcKwJdN9LSRfxliCdbUYqKqwv0cjzWzRU/pub?output=csv';
 
 const VillageStats: React.FC = () => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
@@ -95,33 +94,22 @@ const VillageStats: React.FC = () => {
       try {
         const response = await fetch(SHEET_URL);
         if (!response.ok) {
-          console.error('HTTP error:', response.status, response.statusText);
-          throw new Error(`Failed to fetch data: HTTP ${response.status}. Please ensure the Google Sheet is published and accessible.`);
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
         const csvText = await response.text();
-        if (!csvText.trim()) {
-          throw new Error('Received empty response from Google Sheets. Please check if the sheet contains data.');
-        }
-
+        
         return new Promise((resolve, reject) => {
           Papa.parse(csvText, {
             header: true,
             skipEmptyLines: true,
             complete: (results) => {
               if (results.errors.length > 0) {
-                console.error('CSV parsing errors:', results.errors);
-                reject(new Error('Failed to parse CSV data. Please check if the data format is correct.'));
-                return;
-              }
-              if (!results.data || results.data.length === 0) {
-                reject(new Error('No data found in the spreadsheet. Please add some data to the sheet.'));
+                reject(new Error('Failed to parse CSV data'));
                 return;
               }
               resolve(results.data);
             },
             error: (error) => {
-              console.error('CSV parsing error:', error);
               reject(error);
             }
           });
