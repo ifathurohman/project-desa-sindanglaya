@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Users, Home, Briefcase, GraduationCap, Building, Heart, Church, ShoppingBag, TreePine, FileText, Globe, BookOpen } from 'lucide-react';
+import { ChevronDown, Users, Building, Briefcase, Globe, FileText, BookOpen, Heart } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
+import Papa from 'papaparse';
 import CountUp from '../../utils/CountUp';
 
 interface StatCategory {
@@ -56,8 +57,7 @@ const categories: StatCategory[] = [
   }
 ];
 
-const SHEET_ID = '1Kcpdx_2zS1RZWxj9SWhh3qX-Qy1mUtjoW37K_8MrzR4';
-const API_KEY = '85da650159f799dcf7828dbdda799fc4d083332f'; // You'll need to provide this
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/19VYFhtCSVYf23PnGQqesF9Fo9v8sDzodDpyuIe2n_lI/gviz/tq?tqx=out:csv&gid=1772676547';
 
 const VillageStats: React.FC = () => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
@@ -66,13 +66,18 @@ const VillageStats: React.FC = () => {
   const { data: sheetData, isLoading, error } = useQuery({
     queryKey: ['villageStats'],
     queryFn: async () => {
-      const response = await fetch(
-        `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Sheet1!A:Z?key=${API_KEY}`
-      );
+      const response = await fetch(SHEET_URL);
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('Failed to fetch data');
       }
-      return response.json();
+      const csvText = await response.text();
+      return new Promise((resolve, reject) => {
+        Papa.parse(csvText, {
+          header: true,
+          complete: (results) => resolve(results.data),
+          error: (error) => reject(error)
+        });
+      });
     }
   });
 
@@ -83,6 +88,11 @@ const VillageStats: React.FC = () => {
 
   const toggleSubcategory = (subcategory: string) => {
     setExpandedSubcategory(expandedSubcategory === subcategory ? null : subcategory);
+  };
+
+  const getSubcategoryData = (subcategory: string) => {
+    if (!sheetData) return [];
+    return (sheetData as any[]).filter(row => row.Category === subcategory);
   };
 
   return (
@@ -167,10 +177,14 @@ const VillageStats: React.FC = () => {
                                   className="overflow-hidden"
                                 >
                                   <div className="px-4 pb-4">
-                                    {/* Here you would render the actual data from the Google Sheet */}
-                                    <p className="text-gray-600">
-                                      Data untuk {subcategory} akan ditampilkan di sini
-                                    </p>
+                                    <div className="space-y-2">
+                                      {getSubcategoryData(subcategory).map((row: any, index: number) => (
+                                        <div key={index} className="flex justify-between items-center py-2 border-b">
+                                          <span className="text-gray-700">{row.Indicator}</span>
+                                          <span className="font-medium">{row.Value}</span>
+                                        </div>
+                                      ))}
+                                    </div>
                                   </div>
                                 </motion.div>
                               )}
