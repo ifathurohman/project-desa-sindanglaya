@@ -81,7 +81,7 @@ const categories: StatCategory[] = [
   }
 ];
 
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/19VYFhtCSVYf23PnGQqesF9Fo9v8sDzodDpyuIe2n_lI/gviz/tq?tqx=out:csv&gid=1772676547';
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHcVtU-HGxICiVkrJBGi7YKWUqwkB-0v8qxBsqY_BKyB-J9ZQ2b_lZYXXN_Vtk5Q/pub?output=csv';
 
 const VillageStats: React.FC = () => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
@@ -90,18 +90,27 @@ const VillageStats: React.FC = () => {
   const { data: sheetData, isLoading, error } = useQuery({
     queryKey: ['villageStats'],
     queryFn: async () => {
-      const response = await fetch(SHEET_URL);
-      if (!response.ok) {
-        throw new Error('Failed to fetch data');
-      }
-      const csvText = await response.text();
-      return new Promise((resolve, reject) => {
-        Papa.parse(csvText, {
-          header: true,
-          complete: (results) => resolve(results.data),
-          error: (error) => reject(error)
+      try {
+        const response = await fetch(SHEET_URL);
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        const csvText = await response.text();
+        return new Promise((resolve, reject) => {
+          Papa.parse(csvText, {
+            header: true,
+            skipEmptyLines: true,
+            complete: (results) => {
+              console.log('Parsed data:', results.data); // For debugging
+              resolve(results.data);
+            },
+            error: (error) => reject(error)
+          });
         });
-      });
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+      }
     }
   });
 
