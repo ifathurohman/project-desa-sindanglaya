@@ -7,12 +7,14 @@ import VillageStats from '../components/home/VillageStats';
 import VillageOfficials from '../components/home/VillageOfficials';
 import AgricultureStats from '../components/home/AgricultureStats';
 import CultureSection from '../components/home/CultureSection';
+import PopulationStats from '../components/home/PopulationStats';
 
 const HomePage: React.FC = () => {
   return (
     <div>
       <HeroSection />
       <VillageStats />
+      <PopulationStats />
       <AgricultureStats />
       <CultureSection />
       <QuickLinks />
