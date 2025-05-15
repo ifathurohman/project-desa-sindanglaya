@@ -3,57 +3,81 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Users, Building, Briefcase, Globe, FileText, BookOpen, Heart } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import Papa from 'papaparse';
-import CountUp from '../../utils/CountUp';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  LineChart,
+  Line
+} from 'recharts';
 
 interface StatCategory {
   id: string;
   title: string;
   icon: React.ElementType;
   subcategories: string[];
+  chartType?: 'bar' | 'pie' | 'line';
 }
+
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
 
 const categories: StatCategory[] = [
   {
     id: 'demographics',
     title: 'Demografi & Kependudukan',
     icon: Users,
-    subcategories: ['PROPORSI', 'KEPENDUDUKAN', 'MIGRASI', 'DISTRIBUSI PENDUDUK', 'JENIS PEKERJAAN', 'JENIS AGAMA']
+    subcategories: ['PROPORSI', 'KEPENDUDUKAN', 'MIGRASI', 'DISTRIBUSI PENDUDUK', 'JENIS PEKERJAAN', 'JENIS AGAMA'],
+    chartType: 'pie'
   },
   {
     id: 'economy',
     title: 'Ekonomi',
     icon: Briefcase,
-    subcategories: ['EKONOMI', 'BELANJA DESA', 'KEUANGAN', 'KEUANGAN (2)']
+    subcategories: ['EKONOMI', 'BELANJA DESA', 'KEUANGAN', 'KEUANGAN (2)'],
+    chartType: 'bar'
   },
   {
     id: 'infrastructure',
     title: 'Infrastruktur & Utilitas',
     icon: Building,
-    subcategories: ['HUNIAN', 'AIR', 'Prasarana Air Limbah', 'Prasarana Kelistrikan', 'Prasana Air Bersih', 'Prasana Drainase', 'Prasana Telekomunikasi']
+    subcategories: ['HUNIAN', 'AIR', 'Prasarana Air Limbah', 'Prasarana Kelistrikan', 'Prasana Air Bersih', 'Prasana Drainase', 'Prasana Telekomunikasi'],
+    chartType: 'bar'
   },
   {
     id: 'facilities',
     title: 'Fasilitas & Layanan Publik',
     icon: Heart,
-    subcategories: ['Sarana Pendidikan', 'Sarana Kesehatan', 'Sarana Peribadatan', 'Sarana Perdangan dan Jasa', 'SARANA REKREASI, RTH, LAPANGAN', 'JUMLAH SARANA', 'Prasana Persampahan']
+    subcategories: ['Sarana Pendidikan', 'Sarana Kesehatan', 'Sarana Peribadatan', 'Sarana Perdangan dan Jasa', 'SARANA REKREASI, RTH, LAPANGAN', 'JUMLAH SARANA', 'Prasana Persampahan'],
+    chartType: 'bar'
   },
   {
     id: 'social',
     title: 'Sosial & Budaya',
     icon: Globe,
-    subcategories: ['SOSIAL BUDAYA', 'HUBUNGAN EKSTERNALITAS']
+    subcategories: ['SOSIAL BUDAYA', 'HUBUNGAN EKSTERNALITAS'],
+    chartType: 'pie'
   },
   {
     id: 'governance',
     title: 'Pemerintahan & Kelembagaan',
     icon: FileText,
-    subcategories: ['KELEMBAGAAN', 'LPP DUSUN', 'LPP RW', 'ANALISIS KEBIJAKAN']
+    subcategories: ['KELEMBAGAAN', 'LPP DUSUN', 'LPP RW', 'ANALISIS KEBIJAKAN'],
+    chartType: 'line'
   },
   {
     id: 'programs',
     title: 'Program & Perencanaan',
     icon: BookOpen,
-    subcategories: ['INDIKASI PROGRAM']
+    subcategories: ['INDIKASI PROGRAM'],
+    chartType: 'bar'
   }
 ];
 
@@ -93,6 +117,75 @@ const VillageStats: React.FC = () => {
   const getSubcategoryData = (subcategory: string) => {
     if (!sheetData) return [];
     return (sheetData as any[]).filter(row => row.Category === subcategory);
+  };
+
+  const formatChartData = (data: any[]) => {
+    return data.map(item => ({
+      name: item.Indicator,
+      value: parseFloat(item.Value) || 0
+    }));
+  };
+
+  const renderChart = (category: StatCategory, data: any[]) => {
+    const chartData = formatChartData(data);
+    const height = 300;
+
+    switch (category.chartType) {
+      case 'pie':
+        return (
+          <ResponsiveContainer width="100%" height={height}>
+            <PieChart>
+              <Pie
+                data={chartData}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                outerRadius={80}
+                fill="#8884d8"
+                dataKey="value"
+                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+              >
+                {chartData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        );
+
+      case 'bar':
+        return (
+          <ResponsiveContainer width="100%" height={height}>
+            <BarChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="value" fill="#8884d8" />
+            </BarChart>
+          </ResponsiveContainer>
+        );
+
+      case 'line':
+        return (
+          <ResponsiveContainer width="100%" height={height}>
+            <LineChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="value" stroke="#8884d8" />
+            </LineChart>
+          </ResponsiveContainer>
+        );
+
+      default:
+        return null;
+    }
   };
 
   return (
@@ -152,7 +245,7 @@ const VillageStats: React.FC = () => {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <div className="px-6 pb-4 space-y-2">
+                      <div className="px-6 pb-4 space-y-4">
                         {category.subcategories.map((subcategory) => (
                           <div key={subcategory} className="border rounded-lg">
                             <button
@@ -177,6 +270,12 @@ const VillageStats: React.FC = () => {
                                   className="overflow-hidden"
                                 >
                                   <div className="px-4 pb-4">
+                                    {/* Chart Section */}
+                                    <div className="mb-6">
+                                      {renderChart(category, getSubcategoryData(subcategory))}
+                                    </div>
+
+                                    {/* Data Table Section */}
                                     <div className="space-y-2">
                                       {getSubcategoryData(subcategory).map((row: any, index: number) => (
                                         <div key={index} className="flex justify-between items-center py-2 border-b">
