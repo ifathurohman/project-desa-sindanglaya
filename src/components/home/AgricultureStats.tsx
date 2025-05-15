@@ -816,3 +816,5 @@ const AgricultureStats: React.FC = () => {
 };
 
 export default AgricultureStats;
+
+export default AgricultureStats
