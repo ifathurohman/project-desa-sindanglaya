@@ -9,7 +9,7 @@ import {
   Beaker, 
   Factory,
   Bird,
-  Cow 
+  Cow as CowIcon 
 } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
@@ -485,7 +485,7 @@ const categories = [
   { id: 'forest', title: 'Hasil Hutan', icon: Tree },
   { id: 'mining', title: 'Galian', icon: Mountain },
   { id: 'aquaculture', title: 'Budidaya Air', icon: Fish },
-  { id: 'livestock', title: 'Peternakan', icon: Cow }
+  { id: 'livestock', title: 'Peternakan', icon: CowIcon }
 ];
 
 const AgricultureStats: React.FC = () => {
@@ -816,5 +816,3 @@ const AgricultureStats: React.FC = () => {
 };
 
 export default AgricultureStats;
-
-export default AgricultureStats
