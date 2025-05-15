@@ -540,7 +540,7 @@ const AgricultureStats: React.FC = () => {
                           {item.privateArea.toFixed(2)} Ha
                         </p>
                         <p className="text-sm text-gray-600 mt-1">
-                          Produksi: {item.privateProduction?.toFixed(2)} Ton
+                          Produksi: {item.privateProduction?.toFixed(2) ?? '-'} Ton
                         </p>
                       </div>
                     )}
@@ -551,7 +551,7 @@ const AgricultureStats: React.FC = () => {
                           {item.publicArea.toFixed(2)} Ha
                         </p>
                         <p className="text-sm text-gray-600 mt-1">
-                          Produksi: {item.publicProduction?.toFixed(2)} Ton
+                          Produksi: {item.publicProduction?.toFixed(2) ?? '-'} Ton
                         </p>
                       </div>
                     )}
