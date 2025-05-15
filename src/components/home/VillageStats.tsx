@@ -81,9 +81,9 @@ const categories: StatCategory[] = [
   }
 ];
 
-// Updated Google Sheets URL with correct Sheet ID
-const SHEET_ID = '1vQHcVtU-HGxICiVkrJBGi7YKWUqwkB-0v8qxBsqY_BKyB-J9ZQ2b_lZYXXN_Vtk5Q';
-const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/pub?output=csv&gid=0`;
+// Updated Google Sheets URL with a valid Sheet ID and gid
+const SHEET_ID = '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms';
+const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/pub?output=csv`;
 
 const VillageStats: React.FC = () => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
@@ -96,12 +96,12 @@ const VillageStats: React.FC = () => {
         const response = await fetch(SHEET_URL);
         if (!response.ok) {
           console.error('HTTP error:', response.status, response.statusText);
-          throw new Error(`Failed to fetch data: HTTP ${response.status}`);
+          throw new Error(`Failed to fetch data: HTTP ${response.status}. Please ensure the Google Sheet is published and accessible.`);
         }
         
         const csvText = await response.text();
         if (!csvText.trim()) {
-          throw new Error('Received empty response from Google Sheets');
+          throw new Error('Received empty response from Google Sheets. Please check if the sheet contains data.');
         }
 
         return new Promise((resolve, reject) => {
@@ -111,11 +111,11 @@ const VillageStats: React.FC = () => {
             complete: (results) => {
               if (results.errors.length > 0) {
                 console.error('CSV parsing errors:', results.errors);
-                reject(new Error('Failed to parse CSV data'));
+                reject(new Error('Failed to parse CSV data. Please check if the data format is correct.'));
                 return;
               }
               if (!results.data || results.data.length === 0) {
-                reject(new Error('No data found in the spreadsheet'));
+                reject(new Error('No data found in the spreadsheet. Please add some data to the sheet.'));
                 return;
               }
               resolve(results.data);
@@ -131,8 +131,8 @@ const VillageStats: React.FC = () => {
         throw error;
       }
     },
-    retry: 3, // Retry failed requests up to 3 times
-    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000), // Exponential backoff
+    retry: 3,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 
   const toggleCategory = (categoryId: string) => {
@@ -242,7 +242,7 @@ const VillageStats: React.FC = () => {
         ) : error ? (
           <div className="text-center py-12 text-error-600">
             <p>Terjadi kesalahan saat memuat data: {(error as Error).message}</p>
-            <p className="mt-2 text-sm">Silakan coba muat ulang halaman atau hubungi administrator.</p>
+            <p className="mt-2 text-sm">Pastikan Google Sheet telah dipublikasikan dan dapat diakses.</p>
           </div>
         ) : (
           <div className="space-y-4">
