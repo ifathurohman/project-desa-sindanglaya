@@ -82,7 +82,7 @@ const categories: StatCategory[] = [
 ];
 
 // Update the Google Sheet URL to use the correct published CSV format
-const SHEET_ID = '1x5jgXCxZjbAG2KfAiOWPH9kMJVQyHQqJZ_ZkLKKnwJE';
+const SHEET_ID = '1Kcpdx_2zS1RZWxj9SWhh3qX-Qy1mUtjoW37K_8MrzR4';
 const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
 
 const VillageStats: React.FC = () => {
