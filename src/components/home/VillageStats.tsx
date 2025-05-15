@@ -81,7 +81,9 @@ const categories: StatCategory[] = [
   }
 ];
 
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHcVtU-HGxICiVkrJBGi7YKWUqwkB-0v8qxBsqY_BKyB-J9ZQ2b_lZYXXN_Vtk5Q/pub?output=csv';
+// Updated Google Sheets URL format for more reliable access
+const SHEET_ID = '2PACX-1vQHcVtU-HGxICiVkrJBGi7YKWUqwkB-0v8qxBsqY_BKyB-J9ZQ2b_lZYXXN_Vtk5Q';
+const SHEET_URL = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?output=csv&gid=0`;
 
 const VillageStats: React.FC = () => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
@@ -93,25 +95,44 @@ const VillageStats: React.FC = () => {
       try {
         const response = await fetch(SHEET_URL);
         if (!response.ok) {
-          throw new Error('Failed to fetch data');
+          console.error('HTTP error:', response.status, response.statusText);
+          throw new Error(`Failed to fetch data: HTTP ${response.status}`);
         }
+        
         const csvText = await response.text();
+        if (!csvText.trim()) {
+          throw new Error('Received empty response from Google Sheets');
+        }
+
         return new Promise((resolve, reject) => {
           Papa.parse(csvText, {
             header: true,
             skipEmptyLines: true,
             complete: (results) => {
-              console.log('Parsed data:', results.data); // For debugging
+              if (results.errors.length > 0) {
+                console.error('CSV parsing errors:', results.errors);
+                reject(new Error('Failed to parse CSV data'));
+                return;
+              }
+              if (!results.data || results.data.length === 0) {
+                reject(new Error('No data found in the spreadsheet'));
+                return;
+              }
               resolve(results.data);
             },
-            error: (error) => reject(error)
+            error: (error) => {
+              console.error('CSV parsing error:', error);
+              reject(error);
+            }
           });
         });
       } catch (error) {
         console.error('Error fetching data:', error);
         throw error;
       }
-    }
+    },
+    retry: 3, // Retry failed requests up to 3 times
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000), // Exponential backoff
   });
 
   const toggleCategory = (categoryId: string) => {
@@ -220,7 +241,8 @@ const VillageStats: React.FC = () => {
           </div>
         ) : error ? (
           <div className="text-center py-12 text-error-600">
-            <p>Terjadi kesalahan saat memuat data. Silakan coba lagi nanti.</p>
+            <p>Terjadi kesalahan saat memuat data: {(error as Error).message}</p>
+            <p className="mt-2 text-sm">Silakan coba muat ulang halaman atau hubungi administrator.</p>
           </div>
         ) : (
           <div className="space-y-4">
