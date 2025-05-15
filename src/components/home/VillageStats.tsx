@@ -56,8 +56,8 @@ const categories: StatCategory[] = [
   }
 ];
 
-const SHEET_ID = '19VYFhtCSVYf23PnGQqesF9Fo9v8sDzodDpyuIe2n_lI';
-const API_KEY = 'YOUR_GOOGLE_SHEETS_API_KEY'; // You'll need to provide this
+const SHEET_ID = '1Kcpdx_2zS1RZWxj9SWhh3qX-Qy1mUtjoW37K_8MrzR4';
+const API_KEY = '85da650159f799dcf7828dbdda799fc4d083332f'; // You'll need to provide this
 
 const VillageStats: React.FC = () => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
