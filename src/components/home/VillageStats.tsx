@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Mountain, Cloud, Map, Shield, Tree } from 'lucide-react';
+import { ChevronDown, Mountain, Cloud, Map, Shield, Trees as Tree } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
