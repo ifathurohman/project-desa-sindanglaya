@@ -70,3 +70,28 @@
 .leaflet-popup-content-wrapper {
   border-radius: 0.5rem;
 }
+
+/* Swiper Styles */
+.swiper-button-next,
+.swiper-button-prev {
+  color: theme('colors.primary.600');
+  width: 44px;
+  height: 44px;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.swiper-button-next:after,
+.swiper-button-prev:after {
+  font-size: 20px;
+}
+
+.swiper-button-disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: theme('colors.primary.600');
+}

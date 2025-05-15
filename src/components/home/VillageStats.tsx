@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Users, Home, Briefcase, GraduationCap, Building, Heart, Church, ShoppingBag, TreePine, FileText, Globe, BookOpen } from 'lucide-react';
+import { ChevronDown, Users, Briefcase, Building, Heart, Globe, FileText, BookOpen } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import CountUp from '../../utils/CountUp';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 interface StatCategory {
   id: string;
@@ -56,11 +60,11 @@ const categories: StatCategory[] = [
   }
 ];
 
-const SHEET_ID = '1Kcpdx_2zS1RZWxj9SWhh3qX-Qy1mUtjoW37K_8MrzR4';
-const API_KEY = 'AIzaSyDimmCzkntWdTD6LNCkOQ0gHOtx1xcAHik'; // You'll need to provide this
+const SHEET_ID = '19VYFhtCSVYf23PnGQqesF9Fo9v8sDzodDpyuIe2n_lI';
+const API_KEY = 'AIzaSyDimmCzkntWdTD6LNCkOQ0gHOtx1xcAHik';
 
 const VillageStats: React.FC = () => {
-  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState(0);
   const [expandedSubcategory, setExpandedSubcategory] = useState<string | null>(null);
 
   const { data: sheetData, isLoading, error } = useQuery({
@@ -75,11 +79,6 @@ const VillageStats: React.FC = () => {
       return response.json();
     }
   });
-
-  const toggleCategory = (categoryId: string) => {
-    setExpandedCategory(expandedCategory === categoryId ? null : categoryId);
-    setExpandedSubcategory(null);
-  };
 
   const toggleSubcategory = (subcategory: string) => {
     setExpandedSubcategory(expandedSubcategory === subcategory ? null : subcategory);
@@ -111,78 +110,85 @@ const VillageStats: React.FC = () => {
             <p>Terjadi kesalahan saat memuat data. Silakan coba lagi nanti.</p>
           </div>
         ) : (
-          <div className="space-y-4">
-            {categories.map((category) => (
-              <motion.div
-                key={category.id}
-                initial={false}
-                className="bg-white rounded-xl shadow-sm overflow-hidden"
-              >
-                <button
-                  onClick={() => toggleCategory(category.id)}
-                  className="w-full px-6 py-4 flex items-center justify-between text-left"
+          <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+            {/* Tab Navigation */}
+            <div className="border-b">
+              <div className="overflow-x-auto">
+                <Swiper
+                  modules={[Navigation, Pagination]}
+                  slidesPerView="auto"
+                  spaceBetween={0}
+                  navigation
+                  className="py-2"
                 >
-                  <div className="flex items-center">
-                    <category.icon className="w-5 h-5 text-primary-600 mr-3" />
-                    <h3 className="text-lg font-semibold">{category.title}</h3>
-                  </div>
-                  <ChevronDown
-                    className={`w-5 h-5 transition-transform ${
-                      expandedCategory === category.id ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
+                  {categories.map((category, index) => (
+                    <SwiperSlide key={category.id} style={{ width: 'auto' }}>
+                      <button
+                        onClick={() => setActiveTab(index)}
+                        className={`px-6 py-3 flex items-center whitespace-nowrap transition-colors ${
+                          activeTab === index
+                            ? 'text-primary-600 border-b-2 border-primary-600'
+                            : 'text-gray-600 hover:text-gray-900'
+                        }`}
+                      >
+                        <category.icon className="w-5 h-5 mr-2" />
+                        <span className="font-medium">{category.title}</span>
+                      </button>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </div>
+            </div>
 
-                <AnimatePresence>
-                  {expandedCategory === category.id && (
-                    <motion.div
-                      initial={{ height: 0 }}
-                      animate={{ height: 'auto' }}
-                      exit={{ height: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="px-6 pb-4 space-y-2">
-                        {category.subcategories.map((subcategory) => (
-                          <div key={subcategory} className="border rounded-lg">
-                            <button
-                              onClick={() => toggleSubcategory(subcategory)}
-                              className="w-full px-4 py-3 flex items-center justify-between text-left"
+            {/* Tab Content */}
+            <div className="p-6">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeTab}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="space-y-4">
+                    {categories[activeTab].subcategories.map((subcategory) => (
+                      <div key={subcategory} className="border rounded-lg">
+                        <button
+                          onClick={() => toggleSubcategory(subcategory)}
+                          className="w-full px-4 py-3 flex items-center justify-between text-left"
+                        >
+                          <span className="font-medium">{subcategory}</span>
+                          <ChevronDown
+                            className={`w-4 h-4 transition-transform ${
+                              expandedSubcategory === subcategory ? 'rotate-180' : ''
+                            }`}
+                          />
+                        </button>
+
+                        <AnimatePresence>
+                          {expandedSubcategory === subcategory && (
+                            <motion.div
+                              initial={{ height: 0 }}
+                              animate={{ height: 'auto' }}
+                              exit={{ height: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="overflow-hidden"
                             >
-                              <span className="font-medium">{subcategory}</span>
-                              <ChevronDown
-                                className={`w-4 h-4 transition-transform ${
-                                  expandedSubcategory === subcategory ? 'rotate-180' : ''
-                                }`}
-                              />
-                            </button>
-
-                            <AnimatePresence>
-                              {expandedSubcategory === subcategory && (
-                                <motion.div
-                                  initial={{ height: 0 }}
-                                  animate={{ height: 'auto' }}
-                                  exit={{ height: 0 }}
-                                  transition={{ duration: 0.2 }}
-                                  className="overflow-hidden"
-                                >
-                                  <div className="px-4 pb-4">
-                                    {/* Here you would render the actual data from the Google Sheet */}
-                                    <p className="text-gray-600">
-                                      Data untuk {subcategory} akan ditampilkan di sini
-                                    </p>
-                                  </div>
-                                </motion.div>
-                              )}
-                            </AnimatePresence>
-                          </div>
-                        ))}
+                              <div className="px-4 pb-4">
+                                {/* Here you would render the actual data from the Google Sheet */}
+                                <p className="text-gray-600">
+                                  Data untuk {subcategory} akan ditampilkan di sini
+                                </p>
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                       </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            ))}
+                    ))}
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </div>
         )}
       </div>
