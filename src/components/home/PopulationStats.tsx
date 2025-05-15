@@ -398,3 +398,5 @@ const PopulationStats: React.FC = () => {
 };
 
 export default PopulationStats;
+
+export default PopulationStats
