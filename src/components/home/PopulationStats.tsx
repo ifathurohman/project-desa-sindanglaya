@@ -28,6 +28,23 @@ interface MigrationData {
   netMigration: number;
 }
 
+interface DensityData {
+  year: number;
+  population: number;
+  area: number;
+  density: number;
+  distribution: number;
+  densityLevel: string;
+  regions: {
+    name: string;
+    population: number;
+    area: number;
+    density: number;
+    distribution: number;
+    densityLevel: string;
+  }[];
+}
+
 const populationData: PopulationData[] = [
   { year: 2019, total: 4614, male: 2327, female: 2287, growthRate: 2.08 },
   { year: 2020, total: 4662, male: 2357, female: 2305, growthRate: 1.04 },
@@ -59,6 +76,41 @@ const housingData = [
   { name: 'Rumah Mewah', units: 9, area: 1788, type: 'TIPE 70/200', percentage: 10, color: '#4F46E5' },
   { name: 'Rumah Menengah', units: 27, area: 2413.8, type: 'TIPE 45/90', percentage: 30, color: '#059669' },
   { name: 'Rumah Sederhana', units: 54, area: 3218.4, type: 'TIPE 27/60', percentage: 60, color: '#DC2626' }
+];
+
+const densityData: DensityData[] = [
+  {
+    year: 2019,
+    population: 4614,
+    area: 20.25,
+    density: 2,
+    distribution: 13.90,
+    densityLevel: 'Rendah',
+    regions: [
+      { name: 'Cisitu', population: 2011, area: 2.92, density: 7, distribution: 43.58, densityLevel: 'Tinggi' },
+      { name: 'Nagrog', population: 1349, area: 3.95, density: 3, distribution: 29.24, densityLevel: 'Rendah' },
+      { name: 'Tugu', population: 1254, area: 1.99, density: 6, distribution: 27.18, densityLevel: 'Sedang' }
+    ]
+  },
+  {
+    year: 2024,
+    population: 4797,
+    area: 20.25,
+    density: 2,
+    distribution: 14.46,
+    densityLevel: 'Rendah',
+    regions: [
+      { name: 'Cisitu', population: 2049, area: 2.92, density: 7, distribution: 44.41, densityLevel: 'Tinggi' },
+      { name: 'Nagrog', population: 1464, area: 3.95, density: 4, distribution: 31.73, densityLevel: 'Rendah' },
+      { name: 'Tugu', population: 1271, area: 1.99, density: 6, distribution: 27.55, densityLevel: 'Sedang' }
+    ]
+  }
+];
+
+const densityLevels = [
+  { level: 'Rendah', range: '1-3 Jiwa/Ha', color: '#22C55E' },
+  { level: 'Sedang', range: '4-6 Jiwa/Ha', color: '#F59E0B' },
+  { level: 'Tinggi', range: '7-10 Jiwa/Ha', color: '#EF4444' }
 ];
 
 const PopulationStats: React.FC = () => {
@@ -392,11 +444,131 @@ const PopulationStats: React.FC = () => {
             </div>
           </div>
         </motion.div>
+
+        {/* Population Density Statistics */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          viewport={{ once: true, margin: "-100px" }}
+          className="bg-white rounded-xl shadow-sm p-6"
+        >
+          <div className="flex items-center mb-6">
+            <div className="w-12 h-12 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center mr-4">
+              <Users size={24} />
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold">Kepadatan Penduduk</h3>
+              <p className="text-gray-600">Per Dusun Tahun 2024</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="bg-gray-50">
+                      <th className="px-4 py-3 text-left">Dusun</th>
+                      <th className="px-4 py-3 text-right">Penduduk</th>
+                      <th className="px-4 py-3 text-right">Luas (Ha)</th>
+                      <th className="px-4 py-3 text-right">Kepadatan (Jiwa/Ha)</th>
+                      <th className="px-4 py-3 text-right">Distribusi (%)</th>
+                      <th className="px-4 py-3 text-center">Tingkat</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {densityData[1].regions.map((region, index) => (
+                      <tr key={index} className="border-t">
+                        <td className="px-4 py-3">{region.name}</td>
+                        <td className="px-4 py-3 text-right">{region.population.toLocaleString()}</td>
+                        <td className="px-4 py-3 text-right">{region.area.toFixed(2)}</td>
+                        <td className="px-4 py-3 text-right">{region.density}</td>
+                        <td className="px-4 py-3 text-right">{region.distribution.toFixed(2)}%</td>
+                        <td className="px-4 py-3">
+                          <div className="flex justify-center">
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              region.densityLevel === 'Rendah' ? 'bg-green-100 text-green-800' :
+                              region.densityLevel === 'Sedang' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              {region.densityLevel}
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="mt-6">
+                <h4 className="font-medium mb-3">Tingkat Kepadatan:</h4>
+                <div className="flex flex-wrap gap-4">
+                  {densityLevels.map((level, index) => (
+                    <div key={index} className="flex items-center">
+                      <div 
+                        className="w-3 h-3 rounded-full mr-2"
+                        style={{ backgroundColor: level.color }}
+                      />
+                      <span className="text-sm">
+                        {level.level} ({level.range})
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={densityData[1].regions}
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={80}
+                      dataKey="population"
+                      nameKey="name"
+                      label={({ name, percent }) => `${name} (${(percent * 100).toFixed(1)}%)`}
+                    >
+                      {densityData[1].regions.map((entry, index) => (
+                        <Cell 
+                          key={`cell-${index}`} 
+                          fill={
+                            entry.densityLevel === 'Rendah' ? '#22C55E' :
+                            entry.densityLevel === 'Sedang' ? '#F59E0B' :
+                            '#EF4444'
+                          } 
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+
+              <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                <h4 className="font-medium mb-2">Total Desa</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-gray-600">Luas Wilayah</p>
+                    <p className="text-lg font-semibold">{densityData[1].area.toFixed(2)} Km²</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600">Kepadatan</p>
+                    <p className="text-lg font-semibold">{densityData[1].density} Jiwa/Ha</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
 };
 
 export default PopulationStats;
-
-export default PopulationStats
