@@ -529,7 +529,7 @@ const AgricultureStats: React.FC = () => {
                       <div className="bg-gray-50 p-4 rounded-lg">
                         <h4 className="font-medium mb-2">Luas Panen</h4>
                         <p className="text-xl font-semibold text-primary-600">
-                          {item.harvestedArea.toFixed(2)} Ha
+                          {item.harvestedArea?.toFixed(2)} Ha
                         </p>
                       </div>
                     )}
@@ -537,7 +537,7 @@ const AgricultureStats: React.FC = () => {
                       <div className="bg-gray-50 p-4 rounded-lg">
                         <h4 className="font-medium mb-2">Luas Perkebunan Swasta</h4>
                         <p className="text-xl font-semibold text-primary-600">
-                          {item.privateArea.toFixed(2)} Ha
+                          {item.privateArea?.toFixed(2)} Ha
                         </p>
                         <p className="text-sm text-gray-600 mt-1">
                           Produksi: {item.privateProduction?.toFixed(2) ?? '-'} Ton
@@ -548,7 +548,7 @@ const AgricultureStats: React.FC = () => {
                       <div className="bg-gray-50 p-4 rounded-lg">
                         <h4 className="font-medium mb-2">Luas Perkebunan Rakyat</h4>
                         <p className="text-xl font-semibold text-primary-600">
-                          {item.publicArea.toFixed(2)} Ha
+                          {item.publicArea?.toFixed(2)} Ha
                         </p>
                         <p className="text-sm text-gray-600 mt-1">
                           Produksi: {item.publicProduction?.toFixed(2) ?? '-'} Ton
@@ -558,7 +558,7 @@ const AgricultureStats: React.FC = () => {
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <h4 className="font-medium mb-2">Produksi</h4>
                       <p className="text-xl font-semibold text-primary-600">
-                        {item.production.toFixed(2)} Ton
+                        {item.production?.toFixed(2)} Ton
                       </p>
                     </div>
                     {item.productionValue !== undefined && (
