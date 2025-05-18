@@ -62,7 +62,34 @@ const existingFacilities = [
   { name: 'Posyandu', location: 'RW 04 DUSUN II', count: 1 }
 ];
 
+const projectionData = {
+  '2025': {
+    total: 4833,
+    existing: 5,
+    required: 13,
+    coverage: 37.50,
+    landNeeded: 9300
+  },
+  '2030': {
+    total: 4906,
+    existing: 10,
+    required: 26,
+    coverage: 46.88,
+    landNeeded: 18600
+  },
+  '2035': {
+    total: 5055,
+    existing: 15,
+    required: 39,
+    coverage: 49.22,
+    landNeeded: 27900
+  }
+};
+
 const HealthFacilities: React.FC = () => {
+  const currentYear = '2025';
+  const currentData = projectionData[currentYear];
+
   const totalRequired = Object.values(facilitiesData).reduce(
     (sum, region) => sum + region.facilities.reduce((s, f) => s + f.required, 0),
     0
@@ -91,6 +118,13 @@ const HealthFacilities: React.FC = () => {
       0
     ),
     color: level.color
+  }));
+
+  const projectionChartData = Object.entries(projectionData).map(([year, data]) => ({
+    year,
+    existing: data.existing,
+    required: data.required,
+    coverage: data.coverage
   }));
 
   return (
@@ -210,26 +244,19 @@ const HealthFacilities: React.FC = () => {
             viewport={{ once: true, margin: "-100px" }}
             className="bg-white rounded-xl shadow-sm p-6"
           >
-            <h3 className="text-xl font-semibold mb-6">Fasilitas yang Ada</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="bg-gray-50">
-                    <th className="px-4 py-3 text-left">Jenis</th>
-                    <th className="px-4 py-3 text-left">Lokasi</th>
-                    <th className="px-4 py-3 text-center">Jumlah</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {existingFacilities.map((facility, index) => (
-                    <tr key={index} className="border-t">
-                      <td className="px-4 py-3">{facility.name}</td>
-                      <td className="px-4 py-3">{facility.location}</td>
-                      <td className="px-4 py-3 text-center">{facility.count}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <h3 className="text-xl font-semibold mb-6">Proyeksi Kebutuhan</h3>
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={projectionChartData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="year" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar name="Fasilitas Yang Ada" dataKey="existing" fill="#059669" />
+                  <Bar name="Kebutuhan" dataKey="required" fill="#4F46E5" />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </motion.div>
         </div>
@@ -269,6 +296,36 @@ const HealthFacilities: React.FC = () => {
                         </span>
                       </td>
                     ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          viewport={{ once: true, margin: "-100px" }}
+          className="bg-white rounded-xl shadow-sm p-6"
+        >
+          <h3 className="text-xl font-semibold mb-6">Fasilitas yang Ada</h3>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-gray-50">
+                  <th className="px-4 py-3 text-left">Jenis</th>
+                  <th className="px-4 py-3 text-left">Lokasi</th>
+                  <th className="px-4 py-3 text-center">Jumlah</th>
+                </tr>
+              </thead>
+              <tbody>
+                {existingFacilities.map((facility, index) => (
+                  <tr key={index} className="border-t">
+                    <td className="px-4 py-3">{facility.name}</td>
+                    <td className="px-4 py-3">{facility.location}</td>
+                    <td className="px-4 py-3 text-center">{facility.count}</td>
                   </tr>
                 ))}
               </tbody>
