@@ -9,6 +9,7 @@ import AgricultureStats from '../components/home/AgricultureStats';
 import CultureSection from '../components/home/CultureSection';
 import PopulationStats from '../components/home/PopulationStats';
 import EducationFacilities from '../components/home/EducationFacilities';
+import HealthFacilities from '../components/home/HealthFacilities';
 
 const HomePage: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ const HomePage: React.FC = () => {
       <VillageStats />
       <PopulationStats />
       <EducationFacilities />
+      <HealthFacilities />
       <AgricultureStats />
       <CultureSection />
       <QuickLinks />
