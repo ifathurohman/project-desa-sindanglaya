@@ -66,3 +66,5 @@ const boundaryCoordinates = {
     })}
   </MapContainer>
 </div>
+
+export default boundaryCoordinates
