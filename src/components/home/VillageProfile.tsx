@@ -2,8 +2,16 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Users, ArrowUp, ArrowDown, Building2, Compass, Mountain, Cloud, Trees as Tree, Home, GraduationCap, Building } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { MapContainer, TileLayer, Polygon, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Polygon, Marker, Popup } from 'react-leaflet';
+import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png'
+});
 
 interface DensityLevel {
     level: string;
@@ -43,6 +51,24 @@ const boundaries = {
     west: 'Desa Gununghalu'
 };
 
+const markers = [
+    {
+        position: [-7.0257, 107.2073],
+        title: "Kantor Desa Sindangjaya",
+        description: "Pusat administrasi dan pelayanan masyarakat"
+    },
+    {
+        position: [-7.0227, 107.2053],
+        title: "Pasar Desa",
+        description: "Pusat kegiatan ekonomi masyarakat"
+    },
+    {
+        position: [-7.0287, 107.2093],
+        title: "Puskesmas Pembantu",
+        description: "Fasilitas kesehatan masyarakat"
+    }
+];
+
 const boundaryCoordinates = [
     [-7.0157, 107.1973],
     [-7.0157, 107.2173],
@@ -73,6 +99,7 @@ const generalInfo = {
 
 const VillageProfile: React.FC = () => {
     const [showBoundaries, setShowBoundaries] = useState(false);
+    const [selectedBoundary, setSelectedBoundary] = useState<string | null>(null);
 
     const formatNumber = (num: number) => num.toLocaleString('id-ID');
 
@@ -101,7 +128,6 @@ const VillageProfile: React.FC = () => {
                     </p>
                 </motion.div>
 
-                {/* General Information */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -200,7 +226,6 @@ const VillageProfile: React.FC = () => {
                 </motion.div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                    {/* Map and Boundaries Section */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -240,6 +265,21 @@ const VillageProfile: React.FC = () => {
                                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                                 />
+                                
+                                {markers.map((marker, index) => (
+                                    <Marker 
+                                        key={index} 
+                                        position={marker.position as L.LatLngExpression}
+                                    >
+                                        <Popup>
+                                            <div>
+                                                <h3 className="font-semibold">{marker.title}</h3>
+                                                <p className="text-sm text-gray-600">{marker.description}</p>
+                                            </div>
+                                        </Popup>
+                                    </Marker>
+                                ))}
+
                                 {showBoundaries && (
                                     <Polygon
                                         positions={boundaryCoordinates}
@@ -249,7 +289,32 @@ const VillageProfile: React.FC = () => {
                                             fillColor: '#4F46E5',
                                             fillOpacity: 0.1,
                                         }}
-                                    />
+                                        eventHandlers={{
+                                            click: () => setSelectedBoundary(selectedBoundary ? null : 'Sindangjaya'),
+                                            mouseover: (e) => {
+                                                const layer = e.target;
+                                                layer.setStyle({
+                                                    fillOpacity: 0.2,
+                                                    weight: 3,
+                                                });
+                                            },
+                                            mouseout: (e) => {
+                                                const layer = e.target;
+                                                layer.setStyle({
+                                                    fillOpacity: 0.1,
+                                                    weight: 2,
+                                                });
+                                            }
+                                        }}
+                                    >
+                                        <Popup>
+                                            <div>
+                                                <h3 className="font-semibold">Desa Sindangjaya</h3>
+                                                <p className="text-sm text-gray-600">Luas: {areaStats.area} Km²</p>
+                                                <p className="text-sm text-gray-600">Populasi: {formatNumber(currentYear.total)} jiwa</p>
+                                            </div>
+                                        </Popup>
+                                    </Polygon>
                                 )}
                             </MapContainer>
                         </div>
@@ -267,7 +332,6 @@ const VillageProfile: React.FC = () => {
                         </div>
                     </motion.div>
 
-                    {/* Population Overview */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -370,7 +434,6 @@ const VillageProfile: React.FC = () => {
                     </motion.div>
                 </div>
 
-                {/* Density Levels Legend */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
