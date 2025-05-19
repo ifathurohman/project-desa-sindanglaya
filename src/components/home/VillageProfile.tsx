@@ -77,6 +77,13 @@ const boundaryCoordinates = [
     [-7.0157, 107.1973],
 ];
 
+const boundaryLabels = [
+    { position: [-7.0107, 107.2073], text: 'Desa Cilangari', direction: 'Utara' },
+    { position: [-7.0257, 107.2223], text: 'Desa Bunijaya', direction: 'Timur' },
+    { position: [-7.0407, 107.2073], text: 'Desa Sirnajaya', direction: 'Selatan' },
+    { position: [-7.0257, 107.1923], text: 'Desa Gununghalu', direction: 'Barat' }
+];
+
 const areaStats = {
     area: 20.25,
     population: 4580,
@@ -281,40 +288,62 @@ const VillageProfile: React.FC = () => {
                                 ))}
 
                                 {showBoundaries && (
-                                    <Polygon
-                                        positions={boundaryCoordinates}
-                                        pathOptions={{
-                                            color: '#4F46E5',
-                                            weight: 2,
-                                            fillColor: '#4F46E5',
-                                            fillOpacity: 0.1,
-                                        }}
-                                        eventHandlers={{
-                                            click: () => setSelectedBoundary(selectedBoundary ? null : 'Sindangjaya'),
-                                            mouseover: (e) => {
-                                                const layer = e.target;
-                                                layer.setStyle({
-                                                    fillOpacity: 0.2,
-                                                    weight: 3,
-                                                });
-                                            },
-                                            mouseout: (e) => {
-                                                const layer = e.target;
-                                                layer.setStyle({
-                                                    fillOpacity: 0.1,
-                                                    weight: 2,
-                                                });
-                                            }
-                                        }}
-                                    >
-                                        <Popup>
-                                            <div>
-                                                <h3 className="font-semibold">Desa Sindangjaya</h3>
-                                                <p className="text-sm text-gray-600">Luas: {areaStats.area} Km²</p>
-                                                <p className="text-sm text-gray-600">Populasi: {formatNumber(currentYear.total)} jiwa</p>
-                                            </div>
-                                        </Popup>
-                                    </Polygon>
+                                    <>
+                                        <Polygon
+                                            positions={boundaryCoordinates}
+                                            pathOptions={{
+                                                color: '#4F46E5',
+                                                weight: 2,
+                                                fillColor: '#4F46E5',
+                                                fillOpacity: 0.1,
+                                            }}
+                                            eventHandlers={{
+                                                click: () => setSelectedBoundary(selectedBoundary ? null : 'Sindangjaya'),
+                                                mouseover: (e) => {
+                                                    const layer = e.target;
+                                                    layer.setStyle({
+                                                        fillOpacity: 0.2,
+                                                        weight: 3,
+                                                    });
+                                                },
+                                                mouseout: (e) => {
+                                                    const layer = e.target;
+                                                    layer.setStyle({
+                                                        fillOpacity: 0.1,
+                                                        weight: 2,
+                                                    });
+                                                }
+                                            }}
+                                        >
+                                            <Popup>
+                                                <div>
+                                                    <h3 className="font-semibold">Desa Sindangjaya</h3>
+                                                    <p className="text-sm text-gray-600">Luas: {areaStats.area} Km²</p>
+                                                    <p className="text-sm text-gray-600">Populasi: {formatNumber(currentYear.total)} jiwa</p>
+                                                </div>
+                                            </Popup>
+                                        </Polygon>
+
+                                        {boundaryLabels.map((label, index) => (
+                                            <Marker
+                                                key={index}
+                                                position={label.position as L.LatLngExpression}
+                                                icon={L.divIcon({
+                                                    className: 'custom-div-icon',
+                                                    html: `<div class="bg-white px-2 py-1 rounded shadow text-sm">${label.text}</div>`,
+                                                    iconSize: [100, 20],
+                                                    iconAnchor: [50, 10]
+                                                })}
+                                            >
+                                                <Popup>
+                                                    <div>
+                                                        <h3 className="font-semibold">{label.text}</h3>
+                                                        <p className="text-sm text-gray-600">Batas {label.direction}</p>
+                                                    </div>
+                                                </Popup>
+                                            </Marker>
+                                        ))}
+                                    </>
                                 )}
                             </MapContainer>
                         </div>
