@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Users, ArrowUp, ArrowDown, Building2, Compass, Mountain, Cloud, Tree, Home, GraduationCap, Building } from 'lucide-react';
+import { MapPin, Users, ArrowUp, ArrowDown, Building2, Compass, Mountain, Cloud, Trees as Tree, Home, GraduationCap, Building } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 // Existing interfaces and data...
