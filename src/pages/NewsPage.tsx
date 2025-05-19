@@ -11,12 +11,9 @@ const NewsPage: React.FC = () => {
 
   const categories = [
     { id: 'all', name: 'Semua' },
-    { id: 'tourism', name: 'Wisata' },
-    { id: 'community', name: 'Komunitas' },
-    { id: 'infrastructure', name: 'Infrastruktur' },
-    { id: 'culture', name: 'Budaya' },
-    { id: 'health', name: 'Kesehatan' },
-    { id: 'economy', name: 'Ekonomi' },
+    { id: 'pemerintahan', name: 'Pemerintahan' },
+    { id: 'ekonomi', name: 'Ekonomi' },
+    { id: 'pembangunan', name: 'Pembangunan' }
   ];
 
   const filteredNews = newsData.filter(news => {
@@ -33,7 +30,7 @@ const NewsPage: React.FC = () => {
     <div>
       <PageHeader 
         title="Berita Desa" 
-        description="Informasi terbaru seputar kegiatan dan perkembangan di Desa Kersik"
+        description="Informasi terbaru seputar kegiatan dan perkembangan di Desa Sindangjaya"
         image="https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
       />
       
@@ -42,7 +39,7 @@ const NewsPage: React.FC = () => {
           <div className="max-w-3xl mx-auto text-center mb-12">
             <h2 className="section-title">Berita Terbaru</h2>
             <p className="text-gray-600">
-              Ikuti perkembangan terbaru dari berbagai kegiatan dan program yang dilaksanakan di Desa Kersik
+              Ikuti perkembangan terbaru dari berbagai kegiatan dan program yang dilaksanakan di Desa Sindangjaya
             </p>
           </div>
 
@@ -110,19 +107,14 @@ const NewsPage: React.FC = () => {
                             <span>{news.date}</span>
                             <span className="mx-2">•</span>
                             <span className={`px-2 py-1 rounded-full text-xs ${
-                              news.category === 'tourism' ? 'bg-blue-100 text-blue-800' :
-                              news.category === 'community' ? 'bg-green-100 text-green-800' :
-                              news.category === 'infrastructure' ? 'bg-yellow-100 text-yellow-800' :
-                              news.category === 'culture' ? 'bg-purple-100 text-purple-800' :
-                              news.category === 'health' ? 'bg-red-100 text-red-800' :
+                              news.category === 'pemerintahan' ? 'bg-blue-100 text-blue-800' :
+                              news.category === 'ekonomi' ? 'bg-green-100 text-green-800' :
+                              news.category === 'pembangunan' ? 'bg-yellow-100 text-yellow-800' :
                               'bg-gray-100 text-gray-800'
                             }`}>
-                              {news.category === 'tourism' ? 'Wisata' :
-                               news.category === 'community' ? 'Komunitas' :
-                               news.category === 'infrastructure' ? 'Infrastruktur' :
-                               news.category === 'culture' ? 'Budaya' :
-                               news.category === 'health' ? 'Kesehatan' :
-                               news.category === 'economy' ? 'Ekonomi' :
+                              {news.category === 'pemerintahan' ? 'Pemerintahan' :
+                               news.category === 'ekonomi' ? 'Ekonomi' :
+                               news.category === 'pembangunan' ? 'Pembangunan' :
                                news.category}
                             </span>
                           </div>
