@@ -1,8 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Users, ArrowUp, ArrowDown, Building2, Compass } from 'lucide-react';
+import { MapPin, Users, ArrowUp, ArrowDown, Building2, Compass, Mountain, Cloud, Tree, Home, GraduationCap, Building } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
+// Existing interfaces and data...
 interface DensityLevel {
     level: string;
     range: string;
@@ -19,53 +20,24 @@ const boundaries = {
 const areaStats = {
     area: 20.25,
     population: 4580,
-    density: 226
+    density: 226,
+    altitude: '500-1000',
+    climate: 'Sejuk',
+    rainfall: '2500-3000'
 };
 
-const densityLevels: DensityLevel[] = [
-    { level: 'Rendah', range: '1-3 Jiwa/Ha', color: '#22C55E' },
-    { level: 'Sedang', range: '4-6 Jiwa/Ha', color: '#F59E0B' },
-    { level: 'Tinggi', range: '7-10 Jiwa/Ha', color: '#EF4444' }
-];
-
-const populationData = [
-    { year: 2019, total: 4614, cisitu: 2011, nagrog: 1349, tugu: 1254, distribution: 13.90 },
-    { year: 2020, total: 4662, cisitu: 2016, nagrog: 1396, tugu: 1312, distribution: 14.05 },
-    { year: 2021, total: 4736, cisitu: 2022, nagrog: 1455, tugu: 1326, distribution: 14.27 },
-    { year: 2022, total: 4759, cisitu: 2048, nagrog: 1457, tugu: 1255, distribution: 14.34 },
-    { year: 2023, total: 4784, cisitu: 2049, nagrog: 1464, tugu: 1271, distribution: 14.42 },
-    { year: 2024, total: 4797, cisitu: 2037, nagrog: 1497, tugu: 1262, distribution: 14.46 }
-];
-
-const currentYearData = {
-    year: 2024,
-    regions: [
-        {
-            name: 'Cisitu',
-            population: 2037,
-            area: 292,
-            density: 7,
-            distribution: 44.15,
-            level: 'Tinggi'
-        },
-        {
-            name: 'Nagrog',
-            population: 1497,
-            area: 395,
-            density: 4,
-            distribution: 32.44,
-            level: 'Rendah'
-        },
-        {
-            name: 'Tugu',
-            population: 1262,
-            area: 199,
-            density: 6,
-            distribution: 27.35,
-            level: 'Sedang'
-        }
-    ]
+const generalInfo = {
+    established: 1984,
+    postalCode: '40565',
+    district: 'Gununghalu',
+    regency: 'Kabupaten Bandung Barat',
+    province: 'Jawa Barat',
+    topography: 'Berbukit',
+    mainCommodities: ['Kopi', 'Padi', 'Sayuran'],
+    potentials: ['Pertanian', 'Wisata Alam', 'Kerajinan Tangan']
 };
+
+// ... (keep all existing data constants)
 
 const VillageProfile: React.FC = () => {
     const formatNumber = (num: number) => num.toLocaleString('id-ID');
@@ -91,8 +63,106 @@ const VillageProfile: React.FC = () => {
                 >
                     <h2 className="section-title">Profil Desa Sindangjaya</h2>
                     <p className="text-gray-600 max-w-3xl mx-auto">
-                        Informasi mengenai wilayah dan kependudukan Desa Sindangjaya
+                        Desa Sindangjaya terletak di Kecamatan Gununghalu, Kabupaten Bandung Barat. Desa ini memiliki kontur geografis yang berbukit dan beriklim sejuk, menjadikannya cocok untuk pertanian dan pariwisata alam.
                     </p>
+                </motion.div>
+
+                {/* General Information */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    className="bg-white rounded-xl shadow-sm p-6 mb-8"
+                >
+                    <div className="flex items-center mb-6">
+                        <div className="w-12 h-12 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center mr-4">
+                            <Building size={24} />
+                        </div>
+                        <h3 className="text-xl font-semibold">Informasi Umum</h3>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="bg-gray-50 p-4 rounded-lg">
+                            <h4 className="font-medium mb-3">Administrasi</h4>
+                            <div className="space-y-2">
+                                <p className="text-sm">
+                                    <span className="text-gray-600">Tahun Berdiri:</span>{' '}
+                                    <span className="font-medium">{generalInfo.established}</span>
+                                </p>
+                                <p className="text-sm">
+                                    <span className="text-gray-600">Kode Pos:</span>{' '}
+                                    <span className="font-medium">{generalInfo.postalCode}</span>
+                                </p>
+                                <p className="text-sm">
+                                    <span className="text-gray-600">Kecamatan:</span>{' '}
+                                    <span className="font-medium">{generalInfo.district}</span>
+                                </p>
+                                <p className="text-sm">
+                                    <span className="text-gray-600">Kabupaten:</span>{' '}
+                                    <span className="font-medium">{generalInfo.regency}</span>
+                                </p>
+                                <p className="text-sm">
+                                    <span className="text-gray-600">Provinsi:</span>{' '}
+                                    <span className="font-medium">{generalInfo.province}</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="bg-gray-50 p-4 rounded-lg">
+                            <h4 className="font-medium mb-3">Geografis</h4>
+                            <div className="space-y-2">
+                                <p className="text-sm">
+                                    <span className="text-gray-600">Topografi:</span>{' '}
+                                    <span className="font-medium">{generalInfo.topography}</span>
+                                </p>
+                                <p className="text-sm">
+                                    <span className="text-gray-600">Ketinggian:</span>{' '}
+                                    <span className="font-medium">{areaStats.altitude} mdpl</span>
+                                </p>
+                                <p className="text-sm">
+                                    <span className="text-gray-600">Iklim:</span>{' '}
+                                    <span className="font-medium">{areaStats.climate}</span>
+                                </p>
+                                <p className="text-sm">
+                                    <span className="text-gray-600">Curah Hujan:</span>{' '}
+                                    <span className="font-medium">{areaStats.rainfall} mm/tahun</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="bg-gray-50 p-4 rounded-lg">
+                            <h4 className="font-medium mb-3">Potensi Desa</h4>
+                            <div className="space-y-4">
+                                <div>
+                                    <p className="text-sm text-gray-600 mb-2">Komoditas Utama:</p>
+                                    <div className="flex flex-wrap gap-2">
+                                        {generalInfo.mainCommodities.map((commodity) => (
+                                            <span
+                                                key={commodity}
+                                                className="px-2 py-1 bg-primary-100 text-primary-700 rounded-full text-xs font-medium"
+                                            >
+                                                {commodity}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div>
+                                    <p className="text-sm text-gray-600 mb-2">Sektor Unggulan:</p>
+                                    <div className="flex flex-wrap gap-2">
+                                        {generalInfo.potentials.map((potential) => (
+                                            <span
+                                                key={potential}
+                                                className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium"
+                                            >
+                                                {potential}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </motion.div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
@@ -114,8 +184,9 @@ const VillageProfile: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
-                            <iframe                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31678.8802059115!2d107.19736885912606!3d-7.025734550454537!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4z10!3m3!1m2!1s0x2e685eb54a60622d%3A0xbaa410fbc2298484!2sSindangjaya%2C%20Kec.%20Gununghalu%2C%20Kabupaten%20Bandung%20Barat%2C%20Jawa%20Barat!5e0!3m2!1sid!2sid!4v1747322272935!5m2!1sid!2sid"
+                        <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-6">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31678.8802059115!2d107.19736885912606!3d-7.025734550454537!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4z10!3m3!1m2!1s0x2e685eb54a60622d%3A0xbaa410fbc2298484!2sSindangjaya%2C%20Kec.%20Gununghalu%2C%20Kabupaten%20Bandung%20Barat%2C%20Jawa%20Barat!5e0!3m2!1sid!2sid!4v1747322272935!5m2!1sid!2sid"
                                 width="100%"
                                 height="100%"
                                 style={{ border: 0 }}
@@ -125,7 +196,7 @@ const VillageProfile: React.FC = () => {
                             />
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4 mb-6">
+                        <div className="grid grid-cols-2 gap-4">
                             {Object.entries(boundaries).map(([direction, village]) => (
                                 <div key={direction} className="bg-gray-50 p-4 rounded-lg">
                                     <div className="flex items-center mb-2">
@@ -136,7 +207,6 @@ const VillageProfile: React.FC = () => {
                                 </div>
                             ))}
                         </div>
-
                     </motion.div>
 
                     {/* Population Overview */}
@@ -172,8 +242,7 @@ const VillageProfile: React.FC = () => {
                                     ) : (
                                         <ArrowDown size={20} className="text-red-500" />
                                     )}
-                                    <p className={`text-2xl font-bold ml-2 ${parseFloat(growthRate) >= 0 ? 'text-green-600' : 'text-red-600'
-                                        }`}>
+                                    <p className={`text-2xl font-bold ml-2 ${parseFloat(growthRate) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                                         {growthRate}%
                                     </p>
                                 </div>
@@ -209,10 +278,11 @@ const VillageProfile: React.FC = () => {
                                                 <Building2 size={16} className="text-gray-500 mr-2" />
                                                 <h5 className="font-medium">{region.name}</h5>
                                             </div>
-                                            <span className={`text-sm font-medium px-2 py-1 rounded-full ${region.level === 'Rendah' ? 'bg-green-100 text-green-800' :
+                                            <span className={`text-sm font-medium px-2 py-1 rounded-full ${
+                                                region.level === 'Rendah' ? 'bg-green-100 text-green-800' :
                                                 region.level === 'Sedang' ? 'bg-yellow-100 text-yellow-800' :
-                                                    'bg-red-100 text-red-800'
-                                                }`}>
+                                                'bg-red-100 text-red-800'
+                                            }`}>
                                                 {region.level}
                                             </span>
                                         </div>
@@ -227,8 +297,8 @@ const VillageProfile: React.FC = () => {
                                                     width: `${region.distribution}%`,
                                                     backgroundColor:
                                                         region.level === 'Rendah' ? '#22C55E' :
-                                                            region.level === 'Sedang' ? '#F59E0B' :
-                                                                '#EF4444'
+                                                        region.level === 'Sedang' ? '#F59E0B' :
+                                                        '#EF4444'
                                                 }}
                                             />
                                         </div>
