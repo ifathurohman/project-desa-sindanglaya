@@ -9,8 +9,8 @@ const TourismPage: React.FC = () => {
     <div>
       <PageHeader 
         title="Wisata Desa" 
-        description="Jelajahi keindahan alam dan kekayaan budaya Desa Kersik"
-        image="https://images.pexels.com/photos/1268082/pexels-photo-1268082.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+        description="Jelajahi keindahan alam dan kekayaan budaya Desa Sindangjaya"
+        image="https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
         height="large"
       />
 
@@ -19,7 +19,7 @@ const TourismPage: React.FC = () => {
           <div className="max-w-3xl mx-auto text-center mb-12">
             <h2 className="section-title">Destinasi Wisata</h2>
             <p className="text-gray-600">
-              Desa Kersik menawarkan berbagai destinasi wisata menarik, dari pantai yang indah hingga kampung budaya yang kaya akan tradisi. Mari jelajahi keindahan desa kami!
+              Desa Sindangjaya menawarkan destinasi wisata alam yang menarik. Mari jelajahi keindahan desa kami!
             </p>
           </div>
 
@@ -105,9 +105,9 @@ const TourismPage: React.FC = () => {
       <section className="section bg-gray-50">
         <div className="container">
           <div className="max-w-3xl mx-auto text-center mb-10">
-            <h2 className="section-title">Paket Wisata</h2>
+            <h2 className="section-title">Panduan Wisata</h2>
             <p className="text-gray-600">
-              Nikmati pengalaman berwisata di Desa Kersik dengan paket wisata yang telah kami siapkan
+              Beberapa tips untuk membantu Anda merencanakan kunjungan ke Desa Sindangjaya
             </p>
           </div>
 
@@ -121,31 +121,10 @@ const TourismPage: React.FC = () => {
             >
               <div className="h-2 bg-primary-500"></div>
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Paket Sehari</h3>
-                <div className="text-2xl font-bold text-primary-600 mb-4">Rp250.000<span className="text-sm font-normal text-gray-500">/orang</span></div>
-                <ul className="space-y-2 mb-6">
-                  <li className="flex items-start">
-                    <span className="text-green-500 mr-2">✓</span>
-                    <span>Kunjungan ke Pantai Biru Kersik</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-500 mr-2">✓</span>
-                    <span>Wisata Hutan Mangrove</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-500 mr-2">✓</span>
-                    <span>Makan siang di restoran lokal</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-500 mr-2">✓</span>
-                    <span>Transportasi lokal</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-500 mr-2">✓</span>
-                    <span>Pemandu wisata</span>
-                  </li>
-                </ul>
-                <button className="w-full btn btn-primary">Pesan Sekarang</button>
+                <h3 className="text-xl font-bold mb-2">Waktu Terbaik</h3>
+                <p className="text-gray-600">
+                  Kunjungi pada musim kemarau (April-Oktober) untuk pengalaman terbaik. Hindari berkunjung saat hujan deras untuk keamanan.
+                </p>
               </div>
             </motion.div>
 
@@ -158,31 +137,10 @@ const TourismPage: React.FC = () => {
             >
               <div className="h-2 bg-secondary-500"></div>
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Paket Menginap</h3>
-                <div className="text-2xl font-bold text-primary-600 mb-4">Rp450.000<span className="text-sm font-normal text-gray-500">/orang</span></div>
-                <ul className="space-y-2 mb-6">
-                  <li className="flex items-start">
-                    <span className="text-green-500 mr-2">✓</span>
-                    <span>Semua yang ada di Paket Sehari</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-500 mr-2">✓</span>
-                    <span>Penginapan 1 malam di homestay</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-500 mr-2">✓</span>
-                    <span>Makan malam dengan hidangan lokal</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-500 mr-2">✓</span>
-                    <span>Pertunjukan budaya tradisional</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-500 mr-2">✓</span>
-                    <span>Sarapan pagi</span>
-                  </li>
-                </ul>
-                <button className="w-full btn btn-primary">Pesan Sekarang</button>
+                <h3 className="text-xl font-bold mb-2">Transportasi</h3>
+                <p className="text-gray-600">
+                  Akses menggunakan kendaraan pribadi atau ojek dari terminal terdekat. Pastikan menggunakan kendaraan yang sesuai untuk medan perbukitan.
+                </p>
               </div>
             </motion.div>
 
@@ -195,31 +153,10 @@ const TourismPage: React.FC = () => {
             >
               <div className="h-2 bg-accent-500"></div>
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Paket Keluarga</h3>
-                <div className="text-2xl font-bold text-primary-600 mb-4">Rp850.000<span className="text-sm font-normal text-gray-500">/keluarga</span></div>
-                <ul className="space-y-2 mb-6">
-                  <li className="flex items-start">
-                    <span className="text-green-500 mr-2">✓</span>
-                    <span>Untuk 2 dewasa dan 2 anak</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-500 mr-2">✓</span>
-                    <span>Kunjungan ke semua objek wisata</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-500 mr-2">✓</span>
-                    <span>Workshop kerajinan untuk anak</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-500 mr-2">✓</span>
-                    <span>2x makan (siang dan malam)</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-green-500 mr-2">✓</span>
-                    <span>Foto keluarga dengan pakaian adat</span>
-                  </li>
-                </ul>
-                <button className="w-full btn btn-primary">Pesan Sekarang</button>
+                <h3 className="text-xl font-bold mb-2">Persiapan</h3>
+                <p className="text-gray-600">
+                  Bawa perlengkapan outdoor seperti sepatu trekking, air minum, dan pakaian ganti. Jangan lupa membawa kamera untuk mengabadikan momen.
+                </p>
               </div>
             </motion.div>
           </div>
