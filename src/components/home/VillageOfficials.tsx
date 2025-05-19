@@ -64,27 +64,6 @@ const officials: Official[] = [
   }
 ];
 
-const divisions = [
-  {
-    id: 'leadership',
-    title: 'Pimpinan Desa',
-    icon: Users,
-    officials: officials.filter(o => !o.division && ['Kepala Desa', 'Sekretaris Desa'].includes(o.position))
-  },
-  {
-    id: 'sections',
-    title: 'Kepala Seksi',
-    icon: FileText,
-    officials: officials.filter(o => o.position.includes('Kepala Seksi'))
-  },
-  {
-    id: 'secretariat',
-    title: 'Sekretariat Desa',
-    icon: Building2,
-    officials: officials.filter(o => o.division === 'Sekretariat Desa')
-  }
-];
-
 const VillageOfficials: React.FC = () => {
   return (
     <section className="section bg-gray-50">
@@ -102,69 +81,137 @@ const VillageOfficials: React.FC = () => {
           </p>
         </motion.div>
 
-        <div className="space-y-12">
-          {divisions.map((division, divIndex) => (
+        <div className="relative">
+          {/* Organizational Chart */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-px h-full bg-gray-200"></div>
+          </div>
+
+          <div className="relative z-10 space-y-20">
+            {/* Kepala Desa */}
             <motion.div
-              key={division.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: divIndex * 0.1 }}
-              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+              className="flex justify-center"
             >
-              <div className="flex items-center mb-6">
-                <div className="w-12 h-12 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center mr-4">
-                  <division.icon size={24} />
+              <div className="bg-white rounded-xl shadow-lg p-6 w-64 text-center relative">
+                <div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 translate-y-full w-px h-8 bg-gray-200"></div>
+                <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden">
+                  <img
+                    src={officials[0].image}
+                    alt={officials[0].name}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-                <h3 className="text-2xl font-semibold">{division.title}</h3>
+                <h3 className="font-bold text-lg">{officials[0].name}</h3>
+                <p className="text-primary-600">{officials[0].position}</p>
               </div>
+            </motion.div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {division.officials.map((official, index) => (
-                  <motion.div
+            {/* Sekretaris Desa */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="flex justify-center"
+            >
+              <div className="bg-white rounded-xl shadow-lg p-6 w-64 text-center relative">
+                <div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 translate-y-full w-px h-8 bg-gray-200"></div>
+                <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden">
+                  <img
+                    src={officials[1].image}
+                    alt={officials[1].name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <h3 className="font-bold text-lg">{officials[1].name}</h3>
+                <p className="text-primary-600">{officials[1].position}</p>
+              </div>
+            </motion.div>
+
+            {/* Kepala Seksi & Kaur */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {/* Kepala Seksi */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                viewport={{ once: true }}
+                className="space-y-8"
+              >
+                <h3 className="text-xl font-semibold text-center mb-6">Kepala Seksi</h3>
+                {officials.slice(2, 5).map((official, index) => (
+                  <div
                     key={official.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    viewport={{ once: true, margin: "-100px" }}
-                    className="bg-white rounded-xl shadow-sm overflow-hidden group"
+                    className="bg-white rounded-xl shadow-lg p-6 text-center"
                   >
-                    <div className="relative overflow-hidden aspect-square">
+                    <div className="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden">
                       <img
                         src={official.image}
                         alt={official.name}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="w-full h-full object-cover"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                      <div className="absolute bottom-0 left-0 right-0 p-4">
-                        <h4 className="text-white font-semibold">{official.name}</h4>
-                        <p className="text-white/90 text-sm">{official.position}</p>
-                      </div>
                     </div>
-                  </motion.div>
+                    <h4 className="font-bold">{official.name}</h4>
+                    <p className="text-primary-600 text-sm">{official.position}</p>
+                  </div>
                 ))}
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+
+              {/* Kaur */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+                viewport={{ once: true }}
+                className="space-y-8 lg:col-span-2"
+              >
+                <h3 className="text-xl font-semibold text-center mb-6">Kepala Urusan</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  {officials.slice(5).map((official, index) => (
+                    <div
+                      key={official.id}
+                      className="bg-white rounded-xl shadow-lg p-6 text-center"
+                    >
+                      <div className="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden">
+                        <img
+                          src={official.image}
+                          alt={official.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <h4 className="font-bold">{official.name}</h4>
+                      <p className="text-primary-600 text-sm">{official.position}</p>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
+          </div>
         </div>
 
+        {/* Kepala Dusun */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          viewport={{ once: true, margin: "-100px" }}
-          className="mt-12 pt-12 border-t"
+          transition={{ duration: 0.5, delay: 0.8 }}
+          viewport={{ once: true }}
+          className="mt-20 pt-20 border-t"
         >
-          <div className="flex items-center mb-6">
+          <div className="flex items-center mb-8">
             <div className="w-12 h-12 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center mr-4">
               <MapPin size={24} />
             </div>
-            <h3 className="text-2xl font-semibold">Kepala Wilayah</h3>
+            <h3 className="text-2xl font-semibold">Kepala Dusun</h3>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[1, 2, 3].map((dusun) => (
               <div key={dusun} className="bg-white rounded-xl shadow-sm p-6">
-                <h4 className="text-lg font-semibold mb-2">Kepala Wilayah Dusun {dusun}</h4>
+                <h4 className="text-lg font-semibold mb-2">Kepala Dusun {dusun}</h4>
                 <p className="text-gray-600">Bertanggung jawab atas pengelolaan dan pengembangan Dusun {dusun}</p>
               </div>
             ))}
