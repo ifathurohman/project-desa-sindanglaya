@@ -86,8 +86,8 @@ const yearlyBudgetData = {
 };
 
 const BudgetTransparency: React.FC = () => {
-  const [selectedYear, setSelectedYear] = useState<number>(2023);
-  const years = Object.keys(yearlyBudgetData).map(Number).sort((a, b) => b - a);
+  const [selectedYear, setSelectedYear] = useState<number>(2021);
+  const years = [2021, 2022, 2023];
   const currentData = yearlyBudgetData[selectedYear];
 
   const formatCurrency = (amount: number): string => {
@@ -127,7 +127,7 @@ const BudgetTransparency: React.FC = () => {
       </div>
 
       {/* Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
