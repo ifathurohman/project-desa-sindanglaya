@@ -3,12 +3,36 @@ import { motion } from 'framer-motion';
 import { MapPin, Users, ArrowUp, ArrowDown, Building2, Compass, Mountain, Cloud, Trees as Tree, Home, GraduationCap, Building } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
-// Existing interfaces and data...
 interface DensityLevel {
     level: string;
     range: string;
     color: string;
 }
+
+const populationData = [
+  { year: 2019, total: 4614, male: 2327, female: 2287, growthRate: 2.08 },
+  { year: 2020, total: 4662, male: 2357, female: 2305, growthRate: 1.04 },
+  { year: 2021, total: 4736, male: 2384, female: 2352, growthRate: 1.59 },
+  { year: 2022, total: 4759, male: 2413, female: 2346, growthRate: 0.49 },
+  { year: 2023, total: 4784, male: 2427, female: 2357, growthRate: 0.53 },
+  { year: 2024, total: 4797, male: 2452, female: 2345, growthRate: 0.27 }
+];
+
+const currentYearData = {
+  year: 2024,
+  total: 4797,
+  regions: [
+    { name: 'Cisitu', population: 2037, density: 7, distribution: 44.41, level: 'Tinggi' },
+    { name: 'Nagrog', population: 1497, density: 4, distribution: 31.73, level: 'Rendah' },
+    { name: 'Tugu', population: 1262, density: 6, distribution: 27.55, level: 'Sedang' }
+  ]
+};
+
+const densityLevels = [
+  { level: 'Rendah', range: '1-3 Jiwa/Ha', color: '#22C55E' },
+  { level: 'Sedang', range: '4-6 Jiwa/Ha', color: '#F59E0B' },
+  { level: 'Tinggi', range: '7-10 Jiwa/Ha', color: '#EF4444' }
+];
 
 const boundaries = {
     north: 'Desa Cilangari',
@@ -36,8 +60,6 @@ const generalInfo = {
     mainCommodities: ['Kopi', 'Padi', 'Sayuran'],
     potentials: ['Pertanian', 'Wisata Alam', 'Kerajinan Tangan']
 };
-
-// ... (keep all existing data constants)
 
 const VillageProfile: React.FC = () => {
     const formatNumber = (num: number) => num.toLocaleString('id-ID');
