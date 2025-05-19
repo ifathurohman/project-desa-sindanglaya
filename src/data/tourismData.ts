@@ -14,6 +14,34 @@ export interface TourismSpot {
 export const tourismData: TourismSpot[] = [
   {
     id: 1,
+    name: 'Curug Ngebul',
+    description: 'Curug Ngebul adalah air terjun unik yang memiliki fenomena "asap" yang muncul dari tekanan air yang menghantam bebatuan dasar. Menurut mitos lokal, nama ini berasal dari kejadian ketika seorang putri mandi di kolamnya dan mengeluarkan asap. Namun secara ilmiah, efek asap ini terjadi karena tekanan air yang menghantam bebatuan dasar, menciptakan percikan yang menyerupai asap.',
+    image: 'https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    location: 'Desa Bunijaya, Kecamatan Pagelaran, Kabupaten Cianjur, Provinsi Jawa Barat',
+    hours: 'Setiap hari, 07.00 - 17.00 WIB',
+    ticketPrice: 'Tiket masuk: Rp7.500/orang, Berkemah: Rp15.000/orang, Parkir motor: Rp5.000',
+    facilities: [
+      'Area parkir',
+      'Toilet',
+      'Saung dan gazebo',
+      'Area berkemah',
+      'Kedai dan warung makan'
+    ],
+    activities: [
+      'Trekking',
+      'Fotografi',
+      'Berkemah',
+      'Berenang',
+      'Menikmati pemandangan alam'
+    ],
+    gallery: [
+      'https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+      'https://images.pexels.com/photos/1451076/pexels-photo-1451076.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+      'https://images.pexels.com/photos/2042092/pexels-photo-2042092.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+    ]
+  },
+  {
+    id: 2,
     name: 'Pantai Biru Kersik',
     description: 'Pantai Biru Kersik merupakan destinasi wisata utama di desa ini. Dengan hamparan pasir putih yang bersih dan air laut yang jernih, pantai ini menawarkan pemandangan matahari terbenam yang memukau. Suasana pantai yang tenang dan belum terlalu ramai pengunjung menjadikannya tempat ideal untuk bersantai dan menikmati keindahan alam.',
     image: 'https://images.pexels.com/photos/1268082/pexels-photo-1268082.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -40,33 +68,6 @@ export const tourismData: TourismSpot[] = [
       'https://images.pexels.com/photos/1268082/pexels-photo-1268082.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
       'https://images.pexels.com/photos/1705254/pexels-photo-1705254.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
       'https://images.pexels.com/photos/1450353/pexels-photo-1450353.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-    ]
-  },
-  {
-    id: 2,
-    name: 'Air Terjun Kersik',
-    description: 'Tersembunyi di balik perbukitan Desa Kersik, air terjun ini menawarkan kesegaran air pegunungan yang murni. Pengunjung perlu melakukan trekking ringan sekitar 1 jam untuk mencapai lokasi, namun pemandangan yang ditawarkan sepadan dengan usaha tersebut. Air terjun dengan ketinggian sekitar 15 meter ini dikelilingi oleh pepohonan hijau yang rimbun, menciptakan atmosfer yang sejuk dan menyegarkan.',
-    image: 'https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    location: 'Bukit Kersik, 5 km dari pusat desa',
-    hours: 'Setiap hari, 07.00 - 17.00 WIB',
-    ticketPrice: 'Rp15.000 per orang (termasuk pemandu lokal)',
-    facilities: [
-      'Jalur trekking',
-      'Pos peristirahatan',
-      'Warung sederhana',
-      'Area parkir di titik awal trekking'
-    ],
-    activities: [
-      'Trekking',
-      'Berenang',
-      'Fotografi',
-      'Pengamatan burung',
-      'Piknik'
-    ],
-    gallery: [
-      'https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      'https://images.pexels.com/photos/1451076/pexels-photo-1451076.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      'https://images.pexels.com/photos/2042092/pexels-photo-2042092.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
     ]
   },
   {
