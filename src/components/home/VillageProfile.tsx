@@ -78,10 +78,10 @@ const boundaryCoordinates = [
 ];
 
 const boundaryLabels = [
-    { position: [-7.0451940, 107.2223467], text: 'Desa Cilangari', direction: 'Utara' },
-    { position: [-7.0288074, 107.2591991], text: 'Desa Bunijaya', direction: 'Timur' },
-    { position: [-7.04222, 107.29500], text: 'Desa Sirnajaya', direction: 'Selatan' },
-    { position: [-7.0674000, 107.3322000], text: 'Desa Gununghalu', direction: 'Barat' }
+    { position: [-7.0107, 107.2073], text: 'Desa Cilangari', direction: 'Utara' },
+    { position: [-7.0257, 107.2223], text: 'Desa Bunijaya', direction: 'Timur' },
+    { position: [-7.0407, 107.2073], text: 'Desa Sirnajaya', direction: 'Selatan' },
+    { position: [-7.0257, 107.1923], text: 'Desa Gununghalu', direction: 'Barat' }
 ];
 
 const areaStats = {
