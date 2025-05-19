@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Header: React.FC = () => {
@@ -18,6 +18,7 @@ const Header: React.FC = () => {
 
   const navLinks = [
     { name: 'Beranda', path: '/' },
+    { name: 'Profil Desa', path: '/profile' },
     { name: 'Wisata', path: '/tourism' },
     { name: 'Produk Lokal', path: '/products' },
     { name: 'Transparansi APBDes', path: '/budget' },

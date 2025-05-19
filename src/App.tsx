@@ -7,6 +7,7 @@ import Layout from './components/layout/Layout';
 
 // Pages
 import HomePage from './pages/HomePage';
+import ProfilePage from './pages/ProfilePage';
 import TourismPage from './pages/TourismPage';
 import ProductsPage from './pages/ProductsPage';
 import BudgetPage from './pages/BudgetPage';
@@ -22,6 +23,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
+            <Route path="profile" element={<ProfilePage />} />
             <Route path="tourism" element={<TourismPage />} />
             <Route path="products" element={<ProductsPage />} />
             <Route path="budget" element={<BudgetPage />} />
