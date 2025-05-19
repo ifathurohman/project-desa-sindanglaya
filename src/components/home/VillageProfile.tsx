@@ -1,58 +1,29 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Users, ArrowUp, ArrowDown, Building2 } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { MapPin, Users, ArrowUp, ArrowDown, Building2, Compass } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-interface DensityLevel {
-  level: string;
-  range: string;
-  color: string;
-}
+const boundaries = {
+  north: 'Desa Cilangari',
+  east: 'Desa Bunijaya',
+  south: 'Desa Sirnajaya',
+  west: 'Desa Gununghalu'
+};
 
-const densityLevels: DensityLevel[] = [
-  { level: 'Rendah', range: '1-3 Jiwa/Ha', color: '#22C55E' },
-  { level: 'Sedang', range: '4-6 Jiwa/Ha', color: '#F59E0B' },
-  { level: 'Tinggi', range: '7-10 Jiwa/Ha', color: '#EF4444' }
-];
+const areaStats = {
+  area: 20.25,
+  population: 4580,
+  density: 226
+};
 
 const populationData = [
-  { year: 2019, total: 4614, cisitu: 2011, nagrog: 1349, tugu: 1254, distribution: 13.90 },
-  { year: 2020, total: 4662, cisitu: 2016, nagrog: 1396, tugu: 1312, distribution: 14.05 },
-  { year: 2021, total: 4736, cisitu: 2022, nagrog: 1455, tugu: 1326, distribution: 14.27 },
-  { year: 2022, total: 4759, cisitu: 2048, nagrog: 1457, tugu: 1255, distribution: 14.34 },
-  { year: 2023, total: 4784, cisitu: 2049, nagrog: 1464, tugu: 1271, distribution: 14.42 },
-  { year: 2024, total: 4797, cisitu: 2037, nagrog: 1497, tugu: 1262, distribution: 14.46 }
+  { year: 2019, total: 4614 },
+  { year: 2020, total: 4662 },
+  { year: 2021, total: 4736 },
+  { year: 2022, total: 4759 },
+  { year: 2023, total: 4784 },
+  { year: 2024, total: 4797 }
 ];
-
-const currentYearData = {
-  year: 2024,
-  regions: [
-    {
-      name: 'Cisitu',
-      population: 2037,
-      area: 292,
-      density: 7,
-      distribution: 44.15,
-      level: 'Tinggi'
-    },
-    {
-      name: 'Nagrog',
-      population: 1497,
-      area: 395,
-      density: 4,
-      distribution: 32.44,
-      level: 'Rendah'
-    },
-    {
-      name: 'Tugu',
-      population: 1262,
-      area: 199,
-      density: 6,
-      distribution: 27.35,
-      level: 'Sedang'
-    }
-  ]
-};
 
 const VillageProfile: React.FC = () => {
   const formatNumber = (num: number) => num.toLocaleString('id-ID');
@@ -83,7 +54,7 @@ const VillageProfile: React.FC = () => {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          {/* Map Section */}
+          {/* Map and Boundaries Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -97,8 +68,20 @@ const VillageProfile: React.FC = () => {
               </div>
               <div>
                 <h3 className="text-xl font-semibold">Batas Wilayah</h3>
-                <p className="text-gray-600">Luas Total: 20.25 Km²</p>
+                <p className="text-gray-600">Luas Total: {areaStats.area} Km²</p>
               </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              {Object.entries(boundaries).map(([direction, village]) => (
+                <div key={direction} className="bg-gray-50 p-4 rounded-lg">
+                  <div className="flex items-center mb-2">
+                    <Compass size={16} className="text-gray-500 mr-2" />
+                    <p className="font-medium capitalize">{direction}</p>
+                  </div>
+                  <p className="text-gray-700">{village}</p>
+                </div>
+              ))}
             </div>
 
             <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
@@ -128,16 +111,23 @@ const VillageProfile: React.FC = () => {
               </div>
               <div>
                 <h3 className="text-xl font-semibold">Kependudukan</h3>
-                <p className="text-gray-600">Tahun {currentYear.year}</p>
+                <p className="text-gray-600">Data Tahun {currentYear.year}</p>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
               <div className="bg-gray-50 p-4 rounded-lg">
                 <p className="text-sm text-gray-600 mb-1">Total Penduduk</p>
                 <p className="text-2xl font-bold text-primary-600">
-                  {formatNumber(currentYear.total)}
+                  {formatNumber(areaStats.population)}
                 </p>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <p className="text-sm text-gray-600 mb-1">Kepadatan</p>
+                <p className="text-2xl font-bold text-primary-600">
+                  {areaStats.density}
+                </p>
+                <p className="text-xs text-gray-500">Jiwa/Km²</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg">
                 <p className="text-sm text-gray-600 mb-1">Pertumbuhan</p>
@@ -156,7 +146,7 @@ const VillageProfile: React.FC = () => {
               </div>
             </div>
 
-            <div className="h-64 mb-6">
+            <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={populationData}>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -166,7 +156,7 @@ const VillageProfile: React.FC = () => {
                   <Legend />
                   <Line 
                     type="monotone" 
-                    name="Total"
+                    name="Total Penduduk"
                     dataKey="total" 
                     stroke="#4F46E5" 
                     strokeWidth={2}
@@ -174,75 +164,8 @@ const VillageProfile: React.FC = () => {
                 </LineChart>
               </ResponsiveContainer>
             </div>
-
-            <div>
-              <h4 className="font-semibold mb-4">Distribusi per Dusun</h4>
-              <div className="space-y-4">
-                {currentYearData.regions.map((region) => (
-                  <div key={region.name} className="bg-gray-50 p-4 rounded-lg">
-                    <div className="flex justify-between items-center mb-2">
-                      <div className="flex items-center">
-                        <Building2 size={16} className="text-gray-500 mr-2" />
-                        <h5 className="font-medium">{region.name}</h5>
-                      </div>
-                      <span className={`text-sm font-medium px-2 py-1 rounded-full ${
-                        region.level === 'Rendah' ? 'bg-green-100 text-green-800' :
-                        region.level === 'Sedang' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
-                        {region.level}
-                      </span>
-                    </div>
-                    <div className="flex justify-between text-sm text-gray-600 mb-2">
-                      <span>Populasi: {formatNumber(region.population)}</span>
-                      <span>Kepadatan: {region.density} Jiwa/Ha</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="h-2 rounded-full" 
-                        style={{ 
-                          width: `${region.distribution}%`,
-                          backgroundColor: 
-                            region.level === 'Rendah' ? '#22C55E' :
-                            region.level === 'Sedang' ? '#F59E0B' :
-                            '#EF4444'
-                        }}
-                      />
-                    </div>
-                    <p className="text-xs text-gray-500 mt-1">
-                      {region.distribution.toFixed(2)}% dari total penduduk
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
           </motion.div>
         </div>
-
-        {/* Density Levels Legend */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          viewport={{ once: true, margin: "-100px" }}
-          className="bg-white rounded-xl shadow-sm p-6"
-        >
-          <h4 className="font-semibold mb-4">Tingkat Kepadatan Penduduk</h4>
-          <div className="flex flex-wrap gap-6">
-            {densityLevels.map((level) => (
-              <div key={level.level} className="flex items-center">
-                <div 
-                  className="w-4 h-4 rounded-full mr-2"
-                  style={{ backgroundColor: level.color }}
-                />
-                <div>
-                  <p className="font-medium">{level.level}</p>
-                  <p className="text-sm text-gray-600">{level.range}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
       </div>
     </section>
   );
