@@ -81,142 +81,171 @@ const VillageOfficials: React.FC = () => {
           </p>
         </motion.div>
 
-        <div className="relative">
-          {/* Organizational Chart */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-px h-full bg-gray-200"></div>
+        <div className="relative max-w-5xl mx-auto">
+          {/* Organizational Chart Lines */}
+          <div className="absolute inset-0">
+            <div className="absolute left-1/2 top-[120px] bottom-[400px] w-px bg-gradient-to-b from-primary-200 to-primary-400"></div>
+            <div className="absolute left-1/4 right-1/4 top-[340px] h-px bg-gradient-to-r from-primary-200 via-primary-400 to-primary-200"></div>
+            <div className="absolute left-1/4 top-[340px] bottom-[200px] w-px bg-gradient-to-b from-primary-400 to-primary-200"></div>
+            <div className="absolute right-1/4 top-[340px] bottom-[200px] w-px bg-gradient-to-b from-primary-400 to-primary-200"></div>
           </div>
 
-          <div className="relative z-10 space-y-20">
-            {/* Kepala Desa */}
+          {/* Kepala Desa */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className="relative flex justify-center mb-20"
+          >
+            <div className="bg-white rounded-2xl shadow-xl p-6 w-72 text-center transform transition-transform hover:scale-105">
+              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-6 h-6 bg-primary-500 rotate-45"></div>
+              <div className="w-28 h-28 mx-auto mb-4 rounded-full overflow-hidden ring-4 ring-primary-100">
+                <img
+                  src={officials[0].image}
+                  alt={officials[0].name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <h3 className="font-bold text-xl mb-1">{officials[0].name}</h3>
+              <p className="text-primary-600 font-medium">{officials[0].position}</p>
+            </div>
+          </motion.div>
+
+          {/* Sekretaris Desa */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="relative flex justify-center mb-20"
+          >
+            <div className="bg-white rounded-2xl shadow-xl p-6 w-72 text-center transform transition-transform hover:scale-105">
+              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-6 h-6 bg-primary-500 rotate-45"></div>
+              <div className="w-28 h-28 mx-auto mb-4 rounded-full overflow-hidden ring-4 ring-primary-100">
+                <img
+                  src={officials[1].image}
+                  alt={officials[1].name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <h3 className="font-bold text-xl mb-1">{officials[1].name}</h3>
+              <p className="text-primary-600 font-medium">{officials[1].position}</p>
+            </div>
+          </motion.div>
+
+          {/* Lower Sections */}
+          <div className="grid grid-cols-2 gap-8">
+            {/* Kepala Seksi */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
               viewport={{ once: true }}
-              className="flex justify-center"
+              className="space-y-6"
             >
-              <div className="bg-white rounded-xl shadow-lg p-6 w-64 text-center relative">
-                <div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 translate-y-full w-px h-8 bg-gray-200"></div>
-                <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden">
-                  <img
-                    src={officials[0].image}
-                    alt={officials[0].name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <h3 className="font-bold text-lg">{officials[0].name}</h3>
-                <p className="text-primary-600">{officials[0].position}</p>
-              </div>
-            </motion.div>
-
-            {/* Sekretaris Desa */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="flex justify-center"
-            >
-              <div className="bg-white rounded-xl shadow-lg p-6 w-64 text-center relative">
-                <div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 translate-y-full w-px h-8 bg-gray-200"></div>
-                <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden">
-                  <img
-                    src={officials[1].image}
-                    alt={officials[1].name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <h3 className="font-bold text-lg">{officials[1].name}</h3>
-                <p className="text-primary-600">{officials[1].position}</p>
-              </div>
-            </motion.div>
-
-            {/* Kepala Seksi & Kaur */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* Kepala Seksi */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-                viewport={{ once: true }}
-                className="space-y-8"
-              >
-                <h3 className="text-xl font-semibold text-center mb-6">Kepala Seksi</h3>
-                {officials.slice(2, 5).map((official, index) => (
+              <h3 className="text-xl font-semibold text-center mb-8 bg-gradient-to-r from-primary-600 to-primary-400 text-white py-3 rounded-xl shadow-md">
+                Kepala Seksi
+              </h3>
+              <div className="space-y-6">
+                {officials.slice(2, 5).map((official) => (
                   <div
                     key={official.id}
-                    className="bg-white rounded-xl shadow-lg p-6 text-center"
+                    className="bg-white rounded-xl shadow-lg p-4 transform transition-transform hover:scale-105"
                   >
-                    <div className="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden">
-                      <img
-                        src={official.image}
-                        alt={official.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <h4 className="font-bold">{official.name}</h4>
-                    <p className="text-primary-600 text-sm">{official.position}</p>
-                  </div>
-                ))}
-              </motion.div>
-
-              {/* Kaur */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.6 }}
-                viewport={{ once: true }}
-                className="space-y-8 lg:col-span-2"
-              >
-                <h3 className="text-xl font-semibold text-center mb-6">Kepala Urusan</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                  {officials.slice(5).map((official, index) => (
-                    <div
-                      key={official.id}
-                      className="bg-white rounded-xl shadow-lg p-6 text-center"
-                    >
-                      <div className="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-16 h-16 rounded-full overflow-hidden ring-2 ring-primary-100">
                         <img
                           src={official.image}
                           alt={official.name}
                           className="w-full h-full object-cover"
                         />
                       </div>
-                      <h4 className="font-bold">{official.name}</h4>
-                      <p className="text-primary-600 text-sm">{official.position}</p>
+                      <div className="flex-1">
+                        <h4 className="font-bold text-lg">{official.name}</h4>
+                        <p className="text-primary-600">{official.position}</p>
+                      </div>
                     </div>
-                  ))}
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        </div>
-
-        {/* Kepala Dusun */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.8 }}
-          viewport={{ once: true }}
-          className="mt-20 pt-20 border-t"
-        >
-          <div className="flex items-center mb-8">
-            <div className="w-12 h-12 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center mr-4">
-              <MapPin size={24} />
-            </div>
-            <h3 className="text-2xl font-semibold">Kepala Dusun</h3>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {[1, 2, 3].map((dusun) => (
-              <div key={dusun} className="bg-white rounded-xl shadow-sm p-6">
-                <h4 className="text-lg font-semibold mb-2">Kepala Dusun {dusun}</h4>
-                <p className="text-gray-600">Bertanggung jawab atas pengelolaan dan pengembangan Dusun {dusun}</p>
+                  </div>
+                ))}
               </div>
-            ))}
+            </motion.div>
+
+            {/* Kaur */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+              viewport={{ once: true }}
+              className="space-y-6"
+            >
+              <h3 className="text-xl font-semibold text-center mb-8 bg-gradient-to-r from-primary-400 to-primary-600 text-white py-3 rounded-xl shadow-md">
+                Kepala Urusan
+              </h3>
+              <div className="space-y-6">
+                {officials.slice(5).map((official) => (
+                  <div
+                    key={official.id}
+                    className="bg-white rounded-xl shadow-lg p-4 transform transition-transform hover:scale-105"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <div className="w-16 h-16 rounded-full overflow-hidden ring-2 ring-primary-100">
+                        <img
+                          src={official.image}
+                          alt={official.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-bold text-lg">{official.name}</h4>
+                        <p className="text-primary-600">{official.position}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
           </div>
-        </motion.div>
+
+          {/* Kepala Dusun */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+            viewport={{ once: true }}
+            className="mt-20 pt-20 border-t border-primary-100"
+          >
+            <div className="flex items-center justify-center mb-8">
+              <div className="bg-gradient-to-r from-primary-600 to-primary-400 text-white px-8 py-3 rounded-xl shadow-md">
+                <h3 className="text-xl font-semibold flex items-center">
+                  <MapPin size={24} className="mr-2" />
+                  Kepala Dusun
+                </h3>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              {[1, 2, 3].map((dusun) => (
+                <motion.div
+                  key={dusun}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                  viewport={{ once: true }}
+                  className="bg-white rounded-xl shadow-lg p-6 transform transition-transform hover:scale-105"
+                >
+                  <div className="text-center">
+                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary-100 flex items-center justify-center">
+                      <MapPin size={24} className="text-primary-600" />
+                    </div>
+                    <h4 className="text-lg font-semibold mb-2">Kepala Dusun {dusun}</h4>
+                    <p className="text-gray-600">Dusun {dusun}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );
