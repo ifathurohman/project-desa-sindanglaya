@@ -83,11 +83,26 @@ const VillageOfficials: React.FC = () => {
 
         <div className="relative max-w-5xl mx-auto">
           {/* Organizational Chart Lines */}
-          <div className="absolute inset-0">
-            <div className="absolute left-1/2 top-[120px] bottom-[400px] w-px bg-gradient-to-b from-primary-200 to-primary-400"></div>
-            <div className="absolute left-1/4 right-1/4 top-[340px] h-px bg-gradient-to-r from-primary-200 via-primary-400 to-primary-200"></div>
-            <div className="absolute left-1/4 top-[340px] bottom-[200px] w-px bg-gradient-to-b from-primary-400 to-primary-200"></div>
-            <div className="absolute right-1/4 top-[340px] bottom-[200px] w-px bg-gradient-to-b from-primary-400 to-primary-200"></div>
+          <div className="absolute inset-0 pointer-events-none">
+            {/* Vertical line from Kepala Desa to Sekretaris */}
+            <div className="absolute left-1/2 top-[120px] h-[100px] w-px bg-gradient-to-b from-primary-200 to-primary-400"></div>
+            
+            {/* Vertical line from Sekretaris to bottom sections */}
+            <div className="absolute left-1/2 top-[340px] h-[100px] w-px bg-gradient-to-b from-primary-400 to-primary-200"></div>
+            
+            {/* Horizontal line connecting sections */}
+            <div className="absolute left-1/4 right-1/4 top-[440px] h-px bg-gradient-to-r from-primary-200 via-primary-400 to-primary-200"></div>
+            
+            {/* Vertical lines to Kepala Seksi and Kaur sections */}
+            <div className="absolute left-1/4 top-[440px] h-[60px] w-px bg-gradient-to-b from-primary-400 to-primary-200"></div>
+            <div className="absolute right-1/4 top-[440px] h-[60px] w-px bg-gradient-to-b from-primary-400 to-primary-200"></div>
+
+            {/* Lines to Kepala Dusun */}
+            <div className="absolute left-1/2 top-[800px] h-[100px] w-px bg-gradient-to-b from-primary-400 to-primary-200"></div>
+            <div className="absolute left-1/6 right-1/6 top-[900px] h-px bg-gradient-to-r from-primary-200 via-primary-400 to-primary-200"></div>
+            <div className="absolute left-1/6 top-[900px] h-[60px] w-px bg-gradient-to-b from-primary-400 to-primary-200"></div>
+            <div className="absolute left-1/2 top-[900px] h-[60px] w-px bg-gradient-to-b from-primary-400 to-primary-200"></div>
+            <div className="absolute right-1/6 top-[900px] h-[60px] w-px bg-gradient-to-b from-primary-400 to-primary-200"></div>
           </div>
 
           {/* Kepala Desa */}
@@ -213,7 +228,7 @@ const VillageOfficials: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.8 }}
             viewport={{ once: true }}
-            className="mt-20 pt-20 border-t border-primary-100"
+            className="mt-20 pt-20"
           >
             <div className="flex items-center justify-center mb-8">
               <div className="bg-gradient-to-r from-primary-600 to-primary-400 text-white px-8 py-3 rounded-xl shadow-md">
