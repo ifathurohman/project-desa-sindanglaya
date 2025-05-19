@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Users, ArrowUp, ArrowDown, Building2, Compass, Mountain, Cloud, Trees as Tree, Home, GraduationCap, Building } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { MapContainer, TileLayer, Polygon, useMap } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 
 interface DensityLevel {
     level: string;
@@ -41,6 +43,14 @@ const boundaries = {
     west: 'Desa Gununghalu'
 };
 
+const boundaryCoordinates = [
+    [-7.0157, 107.1973],
+    [-7.0157, 107.2173],
+    [-7.0357, 107.2173],
+    [-7.0357, 107.1973],
+    [-7.0157, 107.1973],
+];
+
 const areaStats = {
     area: 20.25,
     population: 4580,
@@ -62,6 +72,8 @@ const generalInfo = {
 };
 
 const VillageProfile: React.FC = () => {
+    const [showBoundaries, setShowBoundaries] = useState(false);
+
     const formatNumber = (num: number) => num.toLocaleString('id-ID');
 
     const getGrowthRate = (current: number, previous: number) => {
@@ -196,26 +208,50 @@ const VillageProfile: React.FC = () => {
                         viewport={{ once: true, margin: "-100px" }}
                         className="bg-white rounded-xl shadow-sm p-6"
                     >
-                        <div className="flex items-center mb-6">
-                            <div className="w-12 h-12 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center mr-4">
-                                <MapPin size={24} />
+                        <div className="flex items-center justify-between mb-6">
+                            <div className="flex items-center">
+                                <div className="w-12 h-12 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center mr-4">
+                                    <MapPin size={24} />
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-semibold">Batas Wilayah</h3>
+                                    <p className="text-gray-600">Luas Total: {areaStats.area} Km²</p>
+                                </div>
                             </div>
-                            <div>
-                                <h3 className="text-xl font-semibold">Batas Wilayah</h3>
-                                <p className="text-gray-600">Luas Total: {areaStats.area} Km²</p>
-                            </div>
+                            <button
+                                onClick={() => setShowBoundaries(!showBoundaries)}
+                                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                                    showBoundaries 
+                                        ? 'bg-primary-600 text-white hover:bg-primary-700'
+                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                }`}
+                            >
+                                {showBoundaries ? 'Sembunyikan Batas' : 'Tampilkan Batas'}
+                            </button>
                         </div>
 
                         <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-6">
-                            <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31678.8802059115!2d107.19736885912606!3d-7.025734550454537!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4z10!3m3!1m2!1s0x2e685eb54a60622d%3A0xbaa410fbc2298484!2sSindangjaya%2C%20Kec.%20Gununghalu%2C%20Kabupaten%20Bandung%20Barat%2C%20Jawa%20Barat!5e0!3m2!1sid!2sid!4v1747322272935!5m2!1sid!2sid"
-                                width="100%"
-                                height="100%"
-                                style={{ border: 0 }}
-                                allowFullScreen
-                                loading="lazy"
-                                referrerPolicy="no-referrer-when-downgrade"
-                            />
+                            <MapContainer
+                                center={[-7.0257, 107.2073]}
+                                zoom={14}
+                                style={{ height: '100%', width: '100%' }}
+                            >
+                                <TileLayer
+                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                />
+                                {showBoundaries && (
+                                    <Polygon
+                                        positions={boundaryCoordinates}
+                                        pathOptions={{
+                                            color: '#4F46E5',
+                                            weight: 2,
+                                            fillColor: '#4F46E5',
+                                            fillOpacity: 0.1,
+                                        }}
+                                    />
+                                )}
+                            </MapContainer>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
