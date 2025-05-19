@@ -10,11 +10,11 @@ const Footer: React.FC = () => {
           {/* About */}
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <img src="/src/assets/images/logo.svg" alt="Logo Desa Kersik" className="w-10 h-10" />
-              <h3 className="text-lg font-bold">Desa Kersik</h3>
+              <img src="/src/assets/images/logo.svg" alt="Logo Desa Sindangjaya" className="w-10 h-10" />
+              <h3 className="text-lg font-bold">Desa Sindangjaya</h3>
             </div>
             <p className="text-gray-300 mb-4">
-              Desa Kersik terletak di Kecamatan Paloh, Kabupaten Sambas, Kalimantan Barat. Dikenal dengan keindahan Pantai Biru dan produk lokal berkualitas.
+              Desa Sindangjaya terletak di Kecamatan Gununghalu, Kabupaten Bandung Barat, Jawa Barat. Dikenal dengan keindahan alamnya dan produk lokal berkualitas.
             </p>
           </div>
 
@@ -25,6 +25,11 @@ const Footer: React.FC = () => {
               <li>
                 <Link to="/" className="text-gray-300 hover:text-primary-300 transition-colors duration-200">
                   Beranda
+                </Link>
+              </li>
+              <li>
+                <Link to="/profile" className="text-gray-300 hover:text-primary-300 transition-colors duration-200">
+                  Profil Desa
                 </Link>
               </li>
               <li>
@@ -62,16 +67,12 @@ const Footer: React.FC = () => {
               <li className="flex items-start">
                 <MapPin className="w-5 h-5 text-primary-400 mt-0.5 mr-2 flex-shrink-0" />
                 <span className="text-gray-300">
-                  Kantor Desa Kersik, Kecamatan Paloh, Kabupaten Sambas, Kalimantan Barat 79466
+                  Desa Sindangjaya, Kec. Gununghalu, Kab. Bandung Barat, Jawa Barat, 40565
                 </span>
               </li>
               <li className="flex items-center">
-                <Phone className="w-5 h-5 text-primary-400 mr-2 flex-shrink-0" />
-                <span className="text-gray-300">+62 823 5678 9012</span>
-              </li>
-              <li className="flex items-center">
                 <Mail className="w-5 h-5 text-primary-400 mr-2 flex-shrink-0" />
-                <span className="text-gray-300">info@desakersik.desa.id</span>
+                <span className="text-gray-300">emaildesa@digitaldesa.id</span>
               </li>
             </ul>
           </div>
@@ -80,18 +81,25 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Media Sosial</h3>
             <div className="flex space-x-4 mb-6">
-              <a href="#" className="bg-gray-700 hover:bg-primary-600 transition-colors duration-200 p-2 rounded-full">
+              <a 
+                href="https://facebook.com/Desa-Sindangjaya" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="bg-gray-700 hover:bg-primary-600 transition-colors duration-200 p-2 rounded-full"
+              >
                 <Facebook className="w-5 h-5" />
               </a>
-              <a href="#" className="bg-gray-700 hover:bg-primary-600 transition-colors duration-200 p-2 rounded-full">
+              <a 
+                href="https://instagram.com/desasindangjaya74" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="bg-gray-700 hover:bg-primary-600 transition-colors duration-200 p-2 rounded-full"
+              >
                 <Instagram className="w-5 h-5" />
-              </a>
-              <a href="#" className="bg-gray-700 hover:bg-primary-600 transition-colors duration-200 p-2 rounded-full">
-                <Youtube className="w-5 h-5" />
               </a>
             </div>
             <p className="text-gray-300 text-sm">
-              Ikuti kami untuk mendapatkan informasi terbaru dari Desa Kersik
+              Ikuti kami untuk mendapatkan informasi terbaru dari Desa Sindangjaya
             </p>
           </div>
         </div>
@@ -100,7 +108,7 @@ const Footer: React.FC = () => {
       {/* Copyright */}
       <div className="bg-gray-950 py-4">
         <div className="container text-center text-gray-400 text-sm">
-          <p>© {new Date().getFullYear()} Desa Kersik. Semua hak dilindungi.</p>
+          <p>© {new Date().getFullYear()} Desa Sindangjaya. Semua hak dilindungi.</p>
         </div>
       </div>
     </footer>
