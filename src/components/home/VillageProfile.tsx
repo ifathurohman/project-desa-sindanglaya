@@ -463,3 +463,5 @@ const VillageProfile: React.FC = () => {
 };
 
 export default VillageProfile;
+
+export default VillageProfile
