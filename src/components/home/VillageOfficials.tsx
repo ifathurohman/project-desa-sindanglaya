@@ -1,6 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Users, FileText, Building2, MapPin } from 'lucide-react';
+import {
+  DiagramComponent,
+  Inject,
+  DataBinding,
+  HierarchicalTree,
+  SnapConstraints,
+  DiagramTools
+} from '@syncfusion/ej2-react-diagrams';
 
 interface Official {
   id: number;
@@ -65,6 +73,43 @@ const officials: Official[] = [
 ];
 
 const VillageOfficials: React.FC = () => {
+  // Data for organizational chart
+  const orgChartData = {
+    id: 'root',
+    dataSource: [
+      { id: 'kades', Role: 'Kepala Desa', Employee: officials[0].name, parentId: '' },
+      { id: 'sekdes', Role: 'Sekretaris Desa', Employee: officials[1].name, parentId: 'kades' },
+      { id: 'kasi1', Role: 'Kepala Seksi Pemerintahan', Employee: officials[2].name, parentId: 'sekdes' },
+      { id: 'kasi2', Role: 'Kepala Seksi Kesejahteraan', Employee: officials[3].name, parentId: 'sekdes' },
+      { id: 'kasi3', Role: 'Kepala Seksi Pelayanan', Employee: officials[4].name, parentId: 'sekdes' },
+      { id: 'kaur1', Role: 'Kaur Umum', Employee: officials[5].name, parentId: 'sekdes' },
+      { id: 'kaur2', Role: 'Kaur Keuangan', Employee: officials[6].name, parentId: 'sekdes' },
+      { id: 'kaur3', Role: 'Kaur Perencanaan', Employee: officials[7].name, parentId: 'sekdes' }
+    ]
+  };
+
+  const getNodeDefaults = (obj: any) => {
+    obj.height = 60;
+    obj.width = 200;
+    obj.style = {
+      fill: '#ffffff',
+      strokeColor: '#4F46E5',
+      strokeWidth: 2,
+      fontSize: 14,
+      bold: true
+    };
+    return obj;
+  };
+
+  const getConnectorDefaults = (connector: any) => {
+    connector.type = 'Orthogonal';
+    connector.style = {
+      strokeColor: '#4F46E5',
+      strokeWidth: 2
+    };
+    return connector;
+  };
+
   return (
     <section className="section bg-gray-50">
       <div className="container">
@@ -79,6 +124,45 @@ const VillageOfficials: React.FC = () => {
           <p className="text-gray-600 max-w-3xl mx-auto">
             Mengenal para pemimpin yang mengabdi untuk kemajuan Desa Sindangjaya
           </p>
+        </motion.div>
+
+        {/* Syncfusion Diagram */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="mb-16"
+        >
+          <div className="bg-white rounded-xl shadow-lg p-6 overflow-hidden">
+            <DiagramComponent
+              id="diagram"
+              width="100%"
+              height="400px"
+              snapSettings={{ constraints: SnapConstraints.None }}
+              tool={DiagramTools.ZoomPan}
+              layout={{
+                type: 'HierarchicalTree',
+                horizontalSpacing: 40,
+                verticalSpacing: 40,
+                orientation: 'TopToBottom'
+              }}
+              getNodeDefaults={getNodeDefaults}
+              getConnectorDefaults={getConnectorDefaults}
+              dataSourceSettings={{
+                id: 'id',
+                parentId: 'parentId',
+                dataSource: orgChartData.dataSource,
+                doBinding: (nodeModel: any, data: any) => {
+                  nodeModel.annotations = [
+                    { content: data.Role, style: { color: '#4F46E5' } },
+                    { content: data.Employee, style: { color: '#1F2937' } }
+                  ];
+                }
+              }}
+            >
+              <Inject services={[DataBinding, HierarchicalTree]} />
+            </DiagramComponent>
+          </div>
         </motion.div>
 
         <div className="max-w-6xl mx-auto space-y-16">
