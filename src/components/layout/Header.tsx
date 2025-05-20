@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface MenuItem {
@@ -85,33 +85,39 @@ const DesktopMenuItem: React.FC<{ item: MenuItem; depth?: number }> = ({ item, d
         <NavLink
           to={item.path}
           className={({ isActive }) =>
-            `flex items-center px-4 py-2 text-sm font-medium transition-colors duration-200 hover:text-primary-600 ${
+            `flex items-center justify-between px-4 py-2 text-sm font-medium transition-colors duration-200 hover:text-primary-600 ${
               isActive ? 'text-primary-600' : 'text-gray-700'
             }`
           }
         >
           {item.name}
           {item.children && (
-            <ChevronDown size={14} className={`ml-1 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+            depth === 1 ? (
+              <ChevronRight size={14} className="ml-1" />
+            ) : (
+              <ChevronDown size={14} className={`ml-1 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+            )
           )}
         </NavLink>
       ) : (
         <button
-          className={`flex items-center px-4 py-2 text-sm font-medium transition-colors duration-200 hover:text-primary-600 ${
+          className={`flex items-center justify-between w-full px-4 py-2 text-sm font-medium transition-colors duration-200 hover:text-primary-600 ${
             isActive ? 'text-primary-600' : 'text-gray-700'
           }`}
         >
           {item.name}
           {item.children && (
-            <ChevronDown size={14} className={`ml-1 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+            depth === 1 ? (
+              <ChevronRight size={14} className="ml-1" />
+            ) : (
+              <ChevronDown size={14} className={`ml-1 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+            )
           )}
         </button>
       )}
 
       {item.children && isOpen && (
-        <div className={`absolute left-0 mt-0 w-56 bg-white rounded-lg shadow-lg border border-gray-100 py-2 z-50 ${
-          depth === 0 ? 'top-full' : 'top-0 left-full ml-0.5'
-        }`}>
+        <div className={`absolute ${depth === 0 ? 'left-0 top-full' : 'left-full top-0'} mt-0 w-56 bg-white rounded-lg shadow-lg border border-gray-100 py-2 z-50`}>
           {item.children.map((child, index) => (
             <DesktopMenuItem key={index} item={child} depth={depth + 1} />
           ))}
