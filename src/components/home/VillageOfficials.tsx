@@ -68,22 +68,22 @@ const officials: Official[] = [
 ];
 
 const OfficialCard: React.FC<{ official: Official }> = ({ official }) => (
-  <div className="bg-white rounded-lg shadow-md p-4 w-48 transition-transform hover:scale-105">
-    <div className="relative w-16 h-16 mx-auto mb-3">
+  <div className="bg-white rounded-lg shadow-sm p-3 w-40 transition-all duration-300 hover:shadow-md">
+    <div className="relative w-14 h-14 mx-auto mb-2">
       <img
         src={official.image}
         alt={official.name}
         className="w-full h-full object-cover rounded-full border-2 border-primary-100"
       />
       {official.division && (
-        <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 bg-primary-600 text-white text-xs px-2 py-0.5 rounded-full whitespace-nowrap">
+        <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 bg-primary-600 text-white text-[10px] px-2 py-0.5 rounded-full whitespace-nowrap">
           {official.division}
         </div>
       )}
     </div>
     <div className="text-center">
-      <h4 className="font-semibold text-sm text-gray-900 mb-1">{official.name}</h4>
-      <p className="text-xs font-medium text-primary-600 bg-primary-50 rounded-full py-1">
+      <h4 className="font-medium text-xs text-gray-900 mb-1 line-clamp-1">{official.name}</h4>
+      <p className="text-[10px] font-medium text-primary-600 bg-primary-50 rounded-full py-0.5 px-1 line-clamp-2">
         {official.position}
       </p>
     </div>
@@ -92,14 +92,14 @@ const OfficialCard: React.FC<{ official: Official }> = ({ official }) => (
 
 const VillageOfficials: React.FC = () => {
   return (
-    <section className="section bg-gray-50">
+    <section className="section bg-gray-50 py-8">
       <div className="container">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true, margin: "100px" }}
-          className="text-center mb-12"
+          className="text-center mb-8"
         >
           <h2 className="section-title">Struktur Pemerintahan Desa</h2>
           <p className="text-gray-600 max-w-3xl mx-auto">
@@ -107,22 +107,33 @@ const VillageOfficials: React.FC = () => {
           </p>
         </motion.div>
 
-        <div className="flex justify-center overflow-x-auto">
-          <div className="min-w-fit p-8">
+        <div className="flex justify-center overflow-x-auto pb-4">
+          <div className="min-w-fit p-4">
             <Tree
-              lineWidth="2px"
+              lineWidth="1px"
               lineColor="#4F46E5"
-              lineBorderRadius="10px"
+              lineBorderRadius="4px"
               label={<OfficialCard official={officials[0]} />}
+              className="[&_ul]:gap-3 [&_li]:mx-2"
             >
               <TreeNode label={<OfficialCard official={officials[1]} />}>
                 <TreeNode label={<OfficialCard official={officials[5]} />} />
                 <TreeNode label={<OfficialCard official={officials[6]} />} />
                 <TreeNode label={<OfficialCard official={officials[7]} />} />
               </TreeNode>
-              <TreeNode label={<OfficialCard official={officials[2]} />} />
-              <TreeNode label={<OfficialCard official={officials[3]} />} />
-              <TreeNode label={<OfficialCard official={officials[4]} />} />
+
+              <TreeNode label={
+                <div className="flex flex-col gap-3">
+                  <div className="text-xs font-medium text-primary-600 bg-white px-3 py-1 rounded-lg shadow-sm">
+                    Pelaksana Teknis
+                  </div>
+                  <div className="flex gap-3">
+                    <OfficialCard official={officials[2]} />
+                    <OfficialCard official={officials[3]} />
+                    <OfficialCard official={officials[4]} />
+                  </div>
+                </div>
+              } />
             </Tree>
           </div>
         </div>
