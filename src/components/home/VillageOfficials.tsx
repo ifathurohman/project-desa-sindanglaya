@@ -68,22 +68,22 @@ const officials: Official[] = [
 ];
 
 const OfficialCard: React.FC<{ official: Official }> = ({ official }) => (
-  <div className="bg-white rounded-xl shadow-lg p-6 sm:w-60 h-60 transition-all duration-300 mx-auto">
-    <div className="relative w-24 h-24 mx-auto mb-4">
+  <div className="bg-white rounded-lg shadow-md p-4 w-48 transition-transform hover:scale-105">
+    <div className="relative w-16 h-16 mx-auto mb-3">
       <img
         src={official.image}
         alt={official.name}
-        className="w-full h-full object-cover rounded-full border-4 border-primary-100"
+        className="w-full h-full object-cover rounded-full border-2 border-primary-100"
       />
       {official.division && (
-        <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-primary-600 text-white text-xs px-3 py-1 rounded-full whitespace-nowrap">
+        <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 bg-primary-600 text-white text-xs px-2 py-0.5 rounded-full whitespace-nowrap">
           {official.division}
         </div>
       )}
     </div>
-    <div className="text-center space-y-2">
-      <h4 className="font-semibold text-gray-900">{official.name}</h4>
-      <p className="text-sm font-medium text-primary-600 bg-primary-50 rounded-full py-1">
+    <div className="text-center">
+      <h4 className="font-semibold text-sm text-gray-900 mb-1">{official.name}</h4>
+      <p className="text-xs font-medium text-primary-600 bg-primary-50 rounded-full py-1">
         {official.position}
       </p>
     </div>
@@ -107,48 +107,23 @@ const VillageOfficials: React.FC = () => {
           </p>
         </motion.div>
 
-        <div
-          className="p-8 mb-12 flex justify-center"
-        >
-          <div className="transform origin-top scale-100 md:scale-90 lg:scale-100 transition-transform duration-300">
-            <div className="w-full mx-auto">
-              <Tree
-                lineWidth="4px"
-                lineColor="#4F46E5"
-                lineBorderRadius="0"
-                label={<OfficialCard official={officials[0]} />}
-              >
-                {/* Pelaksana Teknis */}
-                <TreeNode label={<OfficialCard official={officials[2]} />} />
-                <TreeNode label={<OfficialCard official={officials[3]} />} />
-                <TreeNode label={<OfficialCard official={officials[4]} />} />
-
-                {/* Wilayah Dusun */}
-                <TreeNode label={<div className="text-indigo-600 font-semibold">Wilayah Dusun</div>}>
-                  <Tree
-                    lineWidth="4px"
-                    lineColor="#4F46E5"
-                    lineBorderRadius="0"
-                    lineHeight="15.5rem"
-                    label=''
-                  >
-                    <TreeNode label={<OfficialCard official={officials[2]} />} />
-                    <TreeNode label={<OfficialCard official={officials[2]} />} />
-                    <TreeNode label={<OfficialCard official={officials[2]} />} />
-                  </Tree>
-                </TreeNode>
-
-                {/* Sekretaris Desa */}
-                <TreeNode label={<OfficialCard official={officials[1]} />}>
-                  <TreeNode label={<OfficialCard official={officials[5]} />} />
-                  <TreeNode label={<OfficialCard official={officials[6]} />}>
-                    <TreeNode label={<OfficialCard official={officials[2]} />} />
-                  </TreeNode>
-                  <TreeNode label={<OfficialCard official={officials[7]} />} />
-                </TreeNode>
-              </Tree>
-
-            </div>
+        <div className="flex justify-center overflow-x-auto">
+          <div className="min-w-fit p-8">
+            <Tree
+              lineWidth="2px"
+              lineColor="#4F46E5"
+              lineBorderRadius="10px"
+              label={<OfficialCard official={officials[0]} />}
+            >
+              <TreeNode label={<OfficialCard official={officials[1]} />}>
+                <TreeNode label={<OfficialCard official={officials[5]} />} />
+                <TreeNode label={<OfficialCard official={officials[6]} />} />
+                <TreeNode label={<OfficialCard official={officials[7]} />} />
+              </TreeNode>
+              <TreeNode label={<OfficialCard official={officials[2]} />} />
+              <TreeNode label={<OfficialCard official={officials[3]} />} />
+              <TreeNode label={<OfficialCard official={officials[4]} />} />
+            </Tree>
           </div>
         </div>
       </div>
