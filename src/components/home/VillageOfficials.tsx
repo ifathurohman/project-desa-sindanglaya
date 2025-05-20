@@ -66,17 +66,20 @@ const officials: Official[] = [
 ];
 
 const OfficialCard: React.FC<{ official: Official }> = ({ official }) => (
-  <div className="bg-white rounded-xl shadow-lg p-4 min-w-[200px]">
-    <div className="relative w-24 h-24 mx-auto mb-3">
+  <div className="bg-white rounded-xl shadow-lg p-4 min-w-[200px] transform transition-all duration-300 hover:scale-105">
+    <div className="relative w-20 h-20 mx-auto mb-3">
       <img
         src={official.image}
         alt={official.name}
         className="w-full h-full object-cover rounded-full border-4 border-primary-100"
       />
+      <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-primary-600 text-white text-xs px-2 py-0.5 rounded-full whitespace-nowrap">
+        {official.division || 'Pimpinan Desa'}
+      </div>
     </div>
     <div className="text-center">
-      <h4 className="font-semibold text-gray-900">{official.name}</h4>
-      <p className="text-sm text-primary-600">{official.position}</p>
+      <h4 className="font-semibold text-gray-900 mb-1">{official.name}</h4>
+      <p className="text-sm text-primary-600 font-medium">{official.position}</p>
     </div>
   </div>
 );
@@ -98,12 +101,13 @@ const VillageOfficials: React.FC = () => {
           </p>
         </motion.div>
 
-        <div className="min-w-[1200px] px-8 overflow-x-auto">
+        <div className="max-w-[1200px] mx-auto overflow-x-auto px-4 py-8 rounded-xl bg-white shadow-sm">
           <Tree
             lineWidth="2px"
             lineColor="#4F46E5"
             lineBorderRadius="10px"
             label={<OfficialCard official={officials[0]} />}
+            className="min-w-[800px]"
           >
             <TreeNode label={<OfficialCard official={officials[1]} />}>
               <TreeNode label={<OfficialCard official={officials[5]} />} />
@@ -125,7 +129,7 @@ const VillageOfficials: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-xl shadow-lg p-6"
+                className="bg-white rounded-xl shadow-lg p-6 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
               >
                 <div className="text-center">
                   <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
