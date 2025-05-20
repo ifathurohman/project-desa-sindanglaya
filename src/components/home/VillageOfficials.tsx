@@ -1,14 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Users, FileText, Building2, MapPin } from 'lucide-react';
-import {
-  DiagramComponent,
-  Inject,
-  DataBinding,
-  HierarchicalTree,
-  SnapConstraints,
-  DiagramTools
-} from '@syncfusion/ej2-react-diagrams';
+import { Tree, TreeNode } from 'react-organizational-chart';
+import { MapPin } from 'lucide-react';
 
 interface Official {
   id: number;
@@ -72,44 +65,23 @@ const officials: Official[] = [
   }
 ];
 
+const OfficialCard: React.FC<{ official: Official }> = ({ official }) => (
+  <div className="bg-white rounded-xl shadow-lg p-4 min-w-[200px]">
+    <div className="relative w-24 h-24 mx-auto mb-3">
+      <img
+        src={official.image}
+        alt={official.name}
+        className="w-full h-full object-cover rounded-full border-4 border-primary-100"
+      />
+    </div>
+    <div className="text-center">
+      <h4 className="font-semibold text-gray-900">{official.name}</h4>
+      <p className="text-sm text-primary-600">{official.position}</p>
+    </div>
+  </div>
+);
+
 const VillageOfficials: React.FC = () => {
-  // Data for organizational chart
-  const orgChartData = {
-    id: 'root',
-    dataSource: [
-      { id: 'kades', Role: 'Kepala Desa', Employee: officials[0].name, parentId: '' },
-      { id: 'sekdes', Role: 'Sekretaris Desa', Employee: officials[1].name, parentId: 'kades' },
-      { id: 'kasi1', Role: 'Kepala Seksi Pemerintahan', Employee: officials[2].name, parentId: 'sekdes' },
-      { id: 'kasi2', Role: 'Kepala Seksi Kesejahteraan', Employee: officials[3].name, parentId: 'sekdes' },
-      { id: 'kasi3', Role: 'Kepala Seksi Pelayanan', Employee: officials[4].name, parentId: 'sekdes' },
-      { id: 'kaur1', Role: 'Kaur Umum', Employee: officials[5].name, parentId: 'sekdes' },
-      { id: 'kaur2', Role: 'Kaur Keuangan', Employee: officials[6].name, parentId: 'sekdes' },
-      { id: 'kaur3', Role: 'Kaur Perencanaan', Employee: officials[7].name, parentId: 'sekdes' }
-    ]
-  };
-
-  const getNodeDefaults = (obj: any) => {
-    obj.height = 60;
-    obj.width = 200;
-    obj.style = {
-      fill: '#ffffff',
-      strokeColor: '#4F46E5',
-      strokeWidth: 2,
-      fontSize: 14,
-      bold: true
-    };
-    return obj;
-  };
-
-  const getConnectorDefaults = (connector: any) => {
-    connector.type = 'Orthogonal';
-    connector.style = {
-      strokeColor: '#4F46E5',
-      strokeWidth: 2
-    };
-    return connector;
-  };
-
   return (
     <section className="section bg-gray-50">
       <div className="container">
@@ -126,188 +98,45 @@ const VillageOfficials: React.FC = () => {
           </p>
         </motion.div>
 
-        {/* Syncfusion Diagram */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="mb-16"
-        >
-          <div className="bg-white rounded-xl shadow-lg p-6 overflow-hidden">
-            <DiagramComponent
-              id="diagram"
-              width="100%"
-              height="400px"
-              snapSettings={{ constraints: SnapConstraints.None }}
-              tool={DiagramTools.ZoomPan}
-              layout={{
-                type: 'HierarchicalTree',
-                horizontalSpacing: 40,
-                verticalSpacing: 40,
-                orientation: 'TopToBottom'
-              }}
-              getNodeDefaults={getNodeDefaults}
-              getConnectorDefaults={getConnectorDefaults}
-              dataSourceSettings={{
-                id: 'id',
-                parentId: 'parentId',
-                dataSource: orgChartData.dataSource,
-                doBinding: (nodeModel: any, data: any) => {
-                  nodeModel.annotations = [
-                    { content: data.Role, style: { color: '#4F46E5' } },
-                    { content: data.Employee, style: { color: '#1F2937' } }
-                  ];
-                }
-              }}
-            >
-              <Inject services={[DataBinding, HierarchicalTree]} />
-            </DiagramComponent>
+        <div className="min-w-[1200px] px-8 overflow-x-auto">
+          <Tree
+            lineWidth="2px"
+            lineColor="#4F46E5"
+            lineBorderRadius="10px"
+            label={<OfficialCard official={officials[0]} />}
+          >
+            <TreeNode label={<OfficialCard official={officials[1]} />}>
+              <TreeNode label={<OfficialCard official={officials[5]} />} />
+              <TreeNode label={<OfficialCard official={officials[6]} />} />
+              <TreeNode label={<OfficialCard official={officials[7]} />} />
+            </TreeNode>
+            <TreeNode label={<OfficialCard official={officials[2]} />} />
+            <TreeNode label={<OfficialCard official={officials[3]} />} />
+            <TreeNode label={<OfficialCard official={officials[4]} />} />
+          </Tree>
+        </div>
+
+        <div className="mt-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {['Dusun 1', 'Dusun 2', 'Dusun 3'].map((dusun, index) => (
+              <motion.div
+                key={dusun}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="bg-white rounded-xl shadow-lg p-6"
+              >
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <MapPin className="w-8 h-8 text-primary-600" />
+                  </div>
+                  <h3 className="text-lg font-semibold mb-2">Kepala {dusun}</h3>
+                  <p className="text-gray-600">Koordinator Wilayah</p>
+                </div>
+              </motion.div>
+            ))}
           </div>
-        </motion.div>
-
-        <div className="max-w-6xl mx-auto space-y-16">
-          {/* Kepala Desa */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="flex justify-center"
-          >
-            <div className="bg-white rounded-2xl shadow-xl overflow-hidden max-w-sm w-full transform hover:scale-105 transition-transform duration-300">
-              <div className="relative h-48">
-                <img
-                  src={officials[0].image}
-                  alt={officials[0].name}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                  <h3 className="text-2xl font-bold">{officials[0].name}</h3>
-                  <p className="text-white/90">{officials[0].position}</p>
-                </div>
-              </div>
-              <div className="p-6 bg-primary-50">
-                <p className="text-primary-700 font-medium text-center">Pimpinan Tertinggi Desa</p>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Sekretaris Desa */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="flex justify-center"
-          >
-            <div className="bg-white rounded-2xl shadow-xl overflow-hidden max-w-sm w-full transform hover:scale-105 transition-transform duration-300">
-              <div className="relative h-48">
-                <img
-                  src={officials[1].image}
-                  alt={officials[1].name}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                  <h3 className="text-2xl font-bold">{officials[1].name}</h3>
-                  <p className="text-white/90">{officials[1].position}</p>
-                </div>
-              </div>
-              <div className="p-6 bg-secondary-50">
-                <p className="text-secondary-700 font-medium text-center">Koordinator Administrasi</p>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Kepala Seksi */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="space-y-8"
-          >
-            <h3 className="text-2xl font-bold text-center">Kepala Seksi</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {officials.slice(2, 5).map((official) => (
-                <div
-                  key={official.id}
-                  className="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300"
-                >
-                  <div className="relative h-40">
-                    <img
-                      src={official.image}
-                      alt={official.name}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                    <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                      <h4 className="text-lg font-bold">{official.name}</h4>
-                      <p className="text-white/90 text-sm">{official.position}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Kepala Urusan */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="space-y-8"
-          >
-            <h3 className="text-2xl font-bold text-center">Kepala Urusan</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {officials.slice(5).map((official) => (
-                <div
-                  key={official.id}
-                  className="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300"
-                >
-                  <div className="relative h-40">
-                    <img
-                      src={official.image}
-                      alt={official.name}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                    <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                      <h4 className="text-lg font-bold">{official.name}</h4>
-                      <p className="text-white/90 text-sm">{official.position}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Kepala Dusun */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="space-y-8"
-          >
-            <h3 className="text-2xl font-bold text-center">Kepala Dusun</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[1, 2, 3].map((dusun) => (
-                <div
-                  key={dusun}
-                  className="bg-white rounded-xl shadow-lg p-6 text-center transform hover:scale-105 transition-transform duration-300"
-                >
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary-100 flex items-center justify-center">
-                    <MapPin size={24} className="text-primary-600" />
-                  </div>
-                  <h4 className="text-lg font-bold mb-2">Kepala Dusun {dusun}</h4>
-                  <p className="text-primary-600">Koordinator Wilayah {dusun}</p>
-                </div>
-              ))}
-            </div>
-          </motion.div>
         </div>
       </div>
     </section>
