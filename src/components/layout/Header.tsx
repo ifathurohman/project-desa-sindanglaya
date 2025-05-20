@@ -127,7 +127,11 @@ const DesktopMenuItem: React.FC<{ item: MenuItem; depth?: number }> = ({ item, d
   );
 };
 
-const MobileMenuItem: React.FC<{ item: MenuItem; depth?: number }> = ({ item, depth = 0 }) => {
+const MobileMenuItem: React.FC<{ 
+  item: MenuItem; 
+  depth?: number;
+  onNavigate: () => void;
+}> = ({ item, depth = 0, onNavigate }) => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
@@ -137,11 +141,21 @@ const MobileMenuItem: React.FC<{ item: MenuItem; depth?: number }> = ({ item, de
                     child.children?.some(grandchild => grandchild.path === location.pathname)
                   ));
 
+  const handleClick = (e: React.MouseEvent) => {
+    if (item.children) {
+      e.preventDefault();
+      setIsOpen(!isOpen);
+    } else if (item.path) {
+      onNavigate();
+    }
+  };
+
   return (
     <div>
       {item.path ? (
         <NavLink
           to={item.path}
+          onClick={handleClick}
           className={({ isActive }) =>
             `flex items-center justify-between py-3 px-4 text-sm font-medium transition-colors duration-200 ${
               isActive ? 'text-primary-600 bg-primary-50' : 'text-gray-700 hover:bg-gray-50'
@@ -154,16 +168,12 @@ const MobileMenuItem: React.FC<{ item: MenuItem; depth?: number }> = ({ item, de
             <ChevronDown 
               size={16} 
               className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-              onClick={(e) => {
-                e.preventDefault();
-                setIsOpen(!isOpen);
-              }}
             />
           )}
         </NavLink>
       ) : (
         <button
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={handleClick}
           className={`flex items-center justify-between w-full py-3 px-4 text-sm font-medium transition-colors duration-200 ${
             isActive ? 'text-primary-600 bg-primary-50' : 'text-gray-700 hover:bg-gray-50'
           }`}
@@ -187,7 +197,12 @@ const MobileMenuItem: React.FC<{ item: MenuItem; depth?: number }> = ({ item, de
             className="overflow-hidden bg-gray-50"
           >
             {item.children.map((child, index) => (
-              <MobileMenuItem key={index} item={child} depth={depth + 1} />
+              <MobileMenuItem 
+                key={index} 
+                item={child} 
+                depth={depth + 1} 
+                onNavigate={onNavigate}
+              />
             ))}
           </motion.div>
         )}
@@ -199,6 +214,7 @@ const MobileMenuItem: React.FC<{ item: MenuItem; depth?: number }> = ({ item, de
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -208,6 +224,15 @@ const Header: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Close menu when location changes
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location]);
+
+  const handleMobileNavigation = () => {
+    setIsMenuOpen(false);
+  };
 
   return (
     <header 
@@ -253,7 +278,11 @@ const Header: React.FC = () => {
           >
             <nav className="container py-4">
               {navLinks.map((item, index) => (
-                <MobileMenuItem key={index} item={item} />
+                <MobileMenuItem 
+                  key={index} 
+                  item={item} 
+                  onNavigate={handleMobileNavigation}
+                />
               ))}
             </nav>
           </motion.div>
