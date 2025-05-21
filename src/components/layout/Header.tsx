@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 interface MenuItem {
   name: string;
   path?: string;
+  description?: string;
+  icon?: React.ElementType;
   children?: MenuItem[];
 }
 
@@ -17,28 +19,28 @@ const navLinks: MenuItem[] = [
   { 
     name: 'Profil Desa',
     children: [
-      { 
-        name: 'Sejarah Desa',
-        path: '/profile/history'
-      },
-      { 
-        name: 'Visi & Misi',
-        path: '/profile/vision'
+      {
+        name: 'Informasi Umum',
+        children: [
+          { name: 'Sejarah Desa', path: '/profile/history', description: 'Sejarah terbentuknya Desa Kersik' },
+          { name: 'Visi & Misi', path: '/profile/vision', description: 'Visi dan misi pembangunan desa' },
+          { name: 'Wilayah Desa', path: '/profile/area', description: 'Informasi wilayah dan batas desa' }
+        ]
       },
       {
         name: 'Pemerintahan',
         children: [
-          { name: 'Struktur Organisasi', path: '/profile/organization' },
-          { name: 'Perangkat Desa', path: '/profile/officials' },
-          { name: 'BPD', path: '/profile/bpd' }
+          { name: 'Struktur Organisasi', path: '/profile/organization', description: 'Struktur organisasi pemerintah desa' },
+          { name: 'Perangkat Desa', path: '/profile/officials', description: 'Profil perangkat desa' },
+          { name: 'BPD', path: '/profile/bpd', description: 'Badan Permusyawaratan Desa' }
         ]
       },
       {
         name: 'Potensi Desa',
         children: [
-          { name: 'Sumber Daya Alam', path: '/profile/natural-resources' },
-          { name: 'Sumber Daya Manusia', path: '/profile/human-resources' },
-          { name: 'Ekonomi', path: '/profile/economy' }
+          { name: 'Sumber Daya Alam', path: '/profile/natural-resources', description: 'Potensi alam desa' },
+          { name: 'Sumber Daya Manusia', path: '/profile/human-resources', description: 'Potensi SDM desa' },
+          { name: 'Ekonomi', path: '/profile/economy', description: 'Potensi ekonomi desa' }
         ]
       }
     ]
@@ -46,16 +48,15 @@ const navLinks: MenuItem[] = [
   { 
     name: 'Layanan',
     children: [
-      { name: 'Administrasi', path: '/services/administration' },
       { 
-        name: 'Surat Online',
+        name: 'Administrasi',
         children: [
-          { name: 'Surat Keterangan', path: '/services/letters/certificate' },
-          { name: 'Surat Pengantar', path: '/services/letters/cover' },
-          { name: 'Surat Domisili', path: '/services/letters/domicile' }
+          { name: 'Surat Keterangan', path: '/services/letters/certificate', description: 'Pembuatan surat keterangan' },
+          { name: 'Surat Pengantar', path: '/services/letters/cover', description: 'Pembuatan surat pengantar' },
+          { name: 'Surat Domisili', path: '/services/letters/domicile', description: 'Pembuatan surat domisili' }
         ]
       },
-      { name: 'Pengaduan', path: '/services/complaints' }
+      { name: 'Pengaduan', path: '/services/complaints', description: 'Layanan pengaduan masyarakat' }
     ]
   },
   { name: 'Wisata', path: '/tourism' },
@@ -85,42 +86,72 @@ const DesktopMenuItem: React.FC<{ item: MenuItem; depth?: number }> = ({ item, d
         <NavLink
           to={item.path}
           className={({ isActive }) =>
-            `flex items-center justify-between px-4 py-2 text-sm font-medium transition-colors duration-200 hover:text-primary-600 ${
+            `flex items-center px-4 py-2 text-sm font-medium transition-colors duration-200 hover:text-primary-600 ${
               isActive ? 'text-primary-600' : 'text-gray-700'
             }`
           }
         >
           {item.name}
           {item.children && (
-            depth === 1 ? (
-              <ChevronRight size={14} className="ml-1" />
-            ) : (
-              <ChevronDown size={14} className={`ml-1 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
-            )
+            <ChevronDown size={14} className={`ml-1 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
           )}
         </NavLink>
       ) : (
         <button
-          className={`flex items-center justify-between w-full px-4 py-2 text-sm font-medium transition-colors duration-200 hover:text-primary-600 ${
+          className={`flex items-center px-4 py-2 text-sm font-medium transition-colors duration-200 hover:text-primary-600 ${
             isActive ? 'text-primary-600' : 'text-gray-700'
           }`}
         >
           {item.name}
-          {item.children && (
-            depth === 1 ? (
-              <ChevronRight size={14} className="ml-1" />
-            ) : (
-              <ChevronDown size={14} className={`ml-1 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
-            )
-          )}
+          <ChevronDown size={14} className={`ml-1 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
         </button>
       )}
 
-      {item.children && isOpen && (
-        <div className={`absolute ${depth === 0 ? 'left-0 top-full' : 'left-full top-0'} mt-0 w-56 bg-white rounded-lg shadow-lg border border-gray-100 py-2 z-50`}>
-          {item.children.map((child, index) => (
-            <DesktopMenuItem key={index} item={child} depth={depth + 1} />
-          ))}
+      {item.children && isOpen && depth === 0 && (
+        <div className="absolute left-0 top-full pt-2 w-screen max-w-screen-lg">
+          <div className="bg-white rounded-lg shadow-lg border border-gray-100 p-6">
+            <div className="grid grid-cols-3 gap-8">
+              {item.children.map((child, index) => (
+                <div key={index}>
+                  <h3 className="font-semibold text-gray-900 mb-3">{child.name}</h3>
+                  {child.children && (
+                    <ul className="space-y-2">
+                      {child.children.map((grandchild, idx) => (
+                        <li key={idx}>
+                          <Link
+                            to={grandchild.path || '#'}
+                            className="block p-2 rounded-lg hover:bg-gray-50 transition-colors"
+                          >
+                            <span className="font-medium text-gray-900">{grandchild.name}</span>
+                            {grandchild.description && (
+                              <p className="text-sm text-gray-500 mt-1">{grandchild.description}</p>
+                            )}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {item.children && isOpen && depth > 0 && (
+        <div className="absolute left-full top-0 ml-1 w-56">
+          <div className="bg-white rounded-lg shadow-lg border border-gray-100 py-2">
+            {item.children.map((child, index) => (
+              <Link
+                key={index}
+                to={child.path || '#'}
+                className="flex items-center justify-between px-4 py-2 text-sm hover:bg-gray-50 transition-colors"
+              >
+                <span>{child.name}</span>
+                {child.children && <ChevronRight size={14} />}
+              </Link>
+            ))}
+          </div>
         </div>
       )}
     </div>
@@ -200,7 +231,7 @@ const MobileMenuItem: React.FC<{
               <MobileMenuItem 
                 key={index} 
                 item={child} 
-                depth={depth + 1} 
+                depth={depth + 1}
                 onNavigate={onNavigate}
               />
             ))}
@@ -280,7 +311,7 @@ const Header: React.FC = () => {
               {navLinks.map((item, index) => (
                 <MobileMenuItem 
                   key={index} 
-                  item={item} 
+                  item={item}
                   onNavigate={handleMobileNavigation}
                 />
               ))}
