@@ -108,7 +108,7 @@ const DesktopMenuItem: React.FC<{ item: MenuItem; depth?: number }> = ({ item, d
       )}
 
       {item.children && isOpen && depth === 0 && (
-        <div className="absolute left-0 top-full pt-2 w-screen max-w-screen-lg">
+        <div className="absolute left-1/2 top-full pt-2 w-screen max-w-screen-lg -translate-x-1/2">
           <div className="bg-white rounded-lg shadow-lg border border-gray-100 p-6">
             <div className="grid grid-cols-3 gap-8">
               {item.children.map((child, index) => (
